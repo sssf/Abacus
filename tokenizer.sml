@@ -1,6 +1,14 @@
+use "datatypes.sml";
+use "functions.sml";
 
 
 
+fun accToString(acc) = implode(List.rev(acc)); 
+
+(* TODO: use tokens instead of strings *)
+(* How do we handle multi character infix operators like mod, div, etc.
+ *  how do we handle postfix operators like "!" 
+ *)
 
 
 
@@ -12,8 +20,8 @@ fun s0([]) = []
       n1(tail, [head])
     else if Char.isAlpha(head) then
       i1(tail, [head])
-   (* else if isOperator(head) then
-      head::o1(tail)*)
+   else if isOperator(head) then
+      head::o1(tail)
     else if Char.isSpace(head) then
       s1(tail,[])
     else
@@ -31,10 +39,10 @@ and s1([], acc) = []
 
 and i1([], acc) = []
   | i1(head::tail, acc) =
-    if Char.isAlpha(head) orelse Char.isDigit(head) orelse head = #"_" then (* because underlines are beautiful! *)
+    if Char.isAlphaNum(head) orelse head = #"_" then (* because underlines are beautiful! *)
       i1(tail, head::acc)
     else
-     implode(List.rev(acc))::s0(head::tail) (* remember to put head back on tail *)
+      accToString(acc)::s0(head::tail) (* remember to put head back on tail *)
 
 
 
@@ -43,7 +51,7 @@ and n4([], acc) = []
     if Char.isDigit(head) then
       n4(tail, head::acc)
     else
-      implode(List.rev(acc))::s0(head::tail)
+      accToString(acc)::s0(head::tail)
 
 and n3([], acc) = []
   | n3(head::tail, acc) =
@@ -57,7 +65,7 @@ and n2([], acc) = []
     if head = #"." then
       n3(tail, head::acc)
     else
-      implode(List.rev(acc))::s0(head::tail)
+      accToString(acc)::s0(head::tail)
 
 and n1([], acc) = []
   | n1(head::tail, acc) =
@@ -66,7 +74,11 @@ and n1([], acc) = []
     else if head = #"." then
       n3(tail, head::acc)
     else
-      implode(List.rev(acc))::s0(head::tail);
+      accToString(acc)::s0(head::tail)
+
+and o1([], acc) = []
+  | o1(head::tail, acc) =
+    if isOperator(head) then
 
 
 
