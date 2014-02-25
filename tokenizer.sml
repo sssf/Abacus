@@ -8,6 +8,7 @@ fun accToString(acc) = implode(List.rev(acc));
 (* TODO: use tokens instead of strings *)
 (* How do we handle multi character infix operators like mod, div, etc.
  *  how do we handle postfix operators like "!" 
+ *  TODO: extend automata to check for operator before reading 0-9 for identiers!?
  *)
 
 
