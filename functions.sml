@@ -1,4 +1,3 @@
-use "datatypes.sml";
 
 
 val functionList = [("sin", 3), ("cos", 3)];

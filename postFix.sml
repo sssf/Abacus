@@ -1,6 +1,3 @@
-use "datatypes.sml";
-use "functions.sml";
-use "stack.sml";
 
 val test = [Number("3"), Operator("+"), Number("4"), Operator("*"), Number("2"), Operator("/"), 
 							Open, Number("1"), Operator("-"), Number("5"), Close, Operator("^"), Number("2"), Operator("^"), Number("3")];

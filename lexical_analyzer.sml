@@ -1,6 +1,3 @@
-use "datatypes.sml";
-use "functions.sml";
-
 
 
 fun log(exp, str) = (print(str^"\n"); exp);
