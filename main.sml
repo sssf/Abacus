@@ -8,7 +8,7 @@ use "input.sml";
 
 
 
-fun run () =
+fun main () =
   let
     val i = input()
   in
