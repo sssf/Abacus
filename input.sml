@@ -34,8 +34,3 @@ fun input () =
 		SOME r => String.substring(r, 0, size r - 1)
 		| NONE => (print "No input!\n";input())
 	);
-
-
-val testin = input();
-
-
