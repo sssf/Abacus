@@ -19,3 +19,6 @@ fun getPriority (Operator(name)) =
     end;  
 fun isOperator(str) = List.exists (fn (operator, _) => str = operator) operatorList;
 
+
+
+fun isSymbolicOperator(c) = isOperator(Char.toString(c));
