@@ -28,11 +28,14 @@ SIDE-EFFECTS: prints to instructions, takes in line of input
 *)
 fun input () =
 	(
-	readLine(); (*URGLY!*)
+	readLine(); (*UGLY!*)
 	print("Enter Expression: ");
 	case str(readLine()) of 
 		SOME r => String.substring(r, 0, size r - 1)
 		| NONE => (print "No input!\n";input())
 	);
 
-val test = input();
+
+val testin = input();
+
+
