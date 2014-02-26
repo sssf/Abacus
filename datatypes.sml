@@ -1,6 +1,6 @@
 
 
-datatype token = Number   of real 
+datatype token = Number   of string
                | Variable of string 
                | Function of string 
                | Operator of string 
