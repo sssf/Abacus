@@ -15,7 +15,7 @@ fun main () =
     if i = "exit" then
       ()
     else
-      (toPostFix(tokenize(i)); run())
+      (toPostFix(tokenize(i)); main())
   end;
   (*
 val i  = input(); 
