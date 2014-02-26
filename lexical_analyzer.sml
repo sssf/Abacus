@@ -6,9 +6,19 @@ use "functions.sml";
 fun log(exp, str) = (print(str^"\n"); exp);
 
 
-fun accToString(acc) = implode(List.rev(acc));
 
 local
+
+  fun accToString(acc) = implode(List.rev(acc));
+
+  fun tokenForIdentifier(str) =
+    if isOperator(str) then
+      Operator(str)
+    else if isFunction(str) then
+      Function(str)
+    else
+      Variable(str);
+
 
   fun start([]) = []
     | start(head::tail) =
@@ -71,24 +81,14 @@ local
         else
           i2(tail, head::acc)
       else
-        if isOperator(accToString(acc)) then
-          Operator(accToString(acc))::start(head::tail)
-        else if isFunction(accToString(acc)) then
-          Function(accToString(acc))::start(head::tail)
-        else
-          Variable(accToString(acc))::start(head::tail)
+        tokenForIdentifier(accToString(acc))::start(head::tail)
 
   and i2([], acc) = []
     | i2(head::tail, acc) =
       if Char.isAlphaNum(head) orelse head = #"_" then
         i2(tail, head::acc)
       else
-        if isOperator(accToString(acc)) then
-          Operator(accToString(acc))::start(head::tail)
-        else if isFunction(accToString(acc)) then
-          Function(accToString(acc))::start(head::tail)
-        else
-          Variable(accToString(acc))::start(head::tail)
+        tokenForIdentifier(accToString(acc))::start(head::tail)
 in
   fun tokenize(str) = start(explode(str^" "))
 end;
