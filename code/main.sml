@@ -10,7 +10,7 @@ use "input.sml";
 
 fun main () =
   let
-    val i = input()
+    val i = input("Enter expression: ")
   in
     if i = "exit" then
       ()
