@@ -1,6 +1,6 @@
 
 val test = [Number("3"), Operator("+"), Number("4"), Operator("*"), Number("2"), Operator("/"), 
-							Open, Number("1"), Operator("-"), Number("5"), Close, Operator("^"), Number("2"), Operator("^"), Number("3")];
+							Open, Number("1"), Operator("-"), Number("5"), Closed, Operator("^"), Number("2"), Operator("^"), Number("3")];
 
 fun toPostFix(l) =
 	let
@@ -11,8 +11,8 @@ fun toPostFix(l) =
 		  | toPostFix'(Open::xs, s, q) = (print("Add ( to s \n");toPostFix'(xs, push(s,Open),q)) (*Input is a left parantheses, adds it to the operator stack*)
 		  
 		  (*Input is right parantheses, move operators from stack to queue untill the matching left parantheses is found*)
-		  | toPostFix'(Close::xs, s, q) = (print(") found, check for ( \n");if (top(s) = Open) then (print("    Removed brackets \n");toPostFix'(xs,pop(s),q)) else (print("    ( not found \n");toPostFix'(Close::xs, pop(s), top(s)::q)))
-		  | toPostFix'(Close::xs, EmptyStack, q) = raise Fail "I like turtles"(*Left parantheses not found, raise exception*)
+		  | toPostFix'(Closed::xs, s, q) = (print(") found, check for ( \n");if (top(s) = Open) then (print("    Removed brackets \n");toPostFix'(xs,pop(s),q)) else (print("    ( not found \n");toPostFix'(Closed::xs, pop(s), top(s)::q)))
+		  | toPostFix'(Closed::xs, EmptyStack, q) = raise Fail "I like turtles"(*Left parantheses not found, raise exception*)
 		  
 		  (*Input is a new expression. Turns expression to postfix, evaluates it and puts it in the output queue*)
 		  (*| toPostFix'(Expression(x::xs)::ys, s, q) = toPostFix'(ys, s, enqueue(q,evaluate(toPostFix(x::xs))))*)

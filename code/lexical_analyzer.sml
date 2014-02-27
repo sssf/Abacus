@@ -47,7 +47,7 @@ local
         start(tail)
       else
         case head of #"(" =>  Open::start(tail)
-                   | #")" => Close::start(tail)
+                   | #")" => Closed::start(tail)
                    | _    => raise Fail ("invalid input: "^Char.toString(head)^" was found")
 
 
@@ -149,7 +149,7 @@ in
      TYPE: string -> token list
      PRE:  true
      POST: list of tokens in str
-     EXAMPLE: tokenize("2 * sin(x)") = [Number("2"), Operator("*"), Function("sin"), Open, Variable("x"), Close]
+     EXAMPLE: tokenize("2 * sin(x)") = [Number("2"), Operator("*"), Function("sin"), Open, Variable("x"), Closed]
   *)
   fun tokenize(str) = start(explode(str))
 
