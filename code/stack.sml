@@ -1,3 +1,4 @@
+(* TODO: why double representation of empty stack? *)
 exception EmptyStackException;
 
 datatype stack = EmptyStack | Stack of token list
