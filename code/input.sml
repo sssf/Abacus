@@ -19,6 +19,10 @@ EXAMPLE: str(SOME "a") = SOME "a"
 fun str s = if s = SOME "\n" then NONE else s;
 
 
+fun eat() =
+  if Char.isSpace(valOf(TextIO.lookahead(TextIO.stdIn))) then (TextIO.input1(TextIO.stdIn); eat())
+  else ();
+
 (* 
 input ()
 TYPE: unit -> string
@@ -28,9 +32,12 @@ SIDE-EFFECTS: prints to instructions, takes in line of input
 *)
 fun input () =
 	(
-	readLine(); (*UGLY!*)
+	(* readLine();*) (*UGLY!*)
+  eat();
 	print("Enter Expression: ");
 	case str(readLine()) of 
 		SOME r => String.substring(r, 0, size r - 1)
 		| NONE => (print "No input!\n";input())
 	);
+
+
