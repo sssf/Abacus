@@ -1,4 +1,4 @@
-(* include and start Abacus! *)
+(* include files and start Abacus! *)
 use "datatypes.sml";
 use "functions.sml";
 use "stack.sml";
@@ -7,7 +7,23 @@ use "postFix.sml";
 use "input.sml";
 
 
+(* main()
+   TYPE: unit -> bool
+   PRE: true
+   POST: true
+   VARIANT: user types "exit"
+   EXAMPLE: main() = true
+*)
+fun main () =
+  let
+    val str = input("Enter expression: ")
+  in
+    str <> "exit" orelse (toPostFix(tokenize(str)); main());
+  end;
 
+
+
+(*
 fun main () =
   let
     val i = input("Enter expression: ")
@@ -17,8 +33,4 @@ fun main () =
     else
       (toPostFix(tokenize(i)); main())
   end;
-  (*
-val i  = input(); 
-val tl = tokenize("3 + 4 - 123");
-val rp = toPostFix(tl);
 *)
