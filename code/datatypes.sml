@@ -8,9 +8,10 @@
    REPRESENTATION INVARIAN: TODO: None? strings must be valid Numbers, functions etc ?
 *)
 datatype token = Number   of string
-               | Variable of string 
-               | Function of string 
-               | Operator of string 
+               | Variable of string
+               | Function of string
+               | Operator of string
+               | Assigment
                | Open
                | Closed
 
@@ -29,6 +30,7 @@ fun format([])                 = "\n"
   | format(Variable(id)::tail) = " "^id^format(tail)
   | format(Function(id)::tail) = " "^id^format(tail)
   | format(Operator(id)::tail) = " "^id^format(tail)
+  | format(Assigment)          = " ="^format(tail)
   | format(Open::tail)         = " ("^format(tail)
   | format(Closed::tail)       = " )"^format(tail)
   | format(_) = raise Fail "FAIL";
