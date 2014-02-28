@@ -4,7 +4,7 @@ local
      TYPE: char list -> string
      PRE:  true
      POST: acc reversed and converted to string
-     EXAMPLE: 
+     EXAMPLE: TODO
   *)
   fun accToString(acc) = implode(List.rev(acc));
 
@@ -30,7 +30,7 @@ local
      TYPE: char list -> token list
      PRE:  TODO
      POST: charList translated into tokens according to specification
-     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters. (see specification)
+     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters. (see specification) TODO: Peter will get back about this.
      EXAMPLE: TODO
   *)
   fun start([]) = []
@@ -46,8 +46,9 @@ local
       else if Char.isSpace(head) then (* ignore whitespace *)
         start(tail)
       else
-        case head of #"(" =>  Open::start(tail)
-                   | #")" => Closed::start(tail)
+        case head of #"=" => Assigment::start(tail) (* "=" *)
+                   | #")" =>    Closed::start(tail)
+                   | #"(" =>      Open::start(tail)
                    | _    => raise Fail ("invalid input: "^Char.toString(head)^" was found")
 
 
