@@ -3,7 +3,8 @@
    VALUE: list of functions and their priorities
    TODO: add function
 *)
-val functionList = [("sin", 3), ("cos", 3)];
+val functionList = [("sin", 42, (fn stack => push(pop(stack),Math.sin(top(stack))))), 
+                    ("cos", 42,  (fn stack => push(pop(stack),Math.cos(top(stack)))))];
 
 
 (* isFunction(str)
@@ -13,7 +14,7 @@ val functionList = [("sin", 3), ("cos", 3)];
    EXAMPLE: isFunction("sin")  = true
             isFunction("bark") = false
 *)
-fun isFunction(str) = List.exists (fn (function, _) => str = function) functionList;
+fun isFunction(str) = List.exists (fn (function,_ , _ ) => str = function) functionList;
 
 
 (* NOTE: ! operator is postfix!? *)
@@ -23,7 +24,18 @@ fun isFunction(str) = List.exists (fn (function, _) => str = function) functionL
    VALUE: list of Operators and their priorities
    TODO: add functions
 *)
-val operatorList = [("+",4),("-",4),("/",5),("*",5),("mod",5),("%",5), ("^",6), ("!",6)];
+
+(* Failed attempt
+  fun operatorFunction (stack, func) = (push(pop(pop(stack), func(top(stack),top(pop(stack))) )));*)
+
+val operatorList = [("+",4,   (fn stack => push(pop(pop(stack)), top(stack) + top(pop(stack)) ))),
+                    ("-",4,   (fn stack => push(pop(pop(stack)), top(stack) - top(pop(stack)) ))),
+                    ("/",5,   (fn stack => push(pop(pop(stack)), top(stack) / top(pop(stack)) ))),
+                    ("*",5,   (fn stack => push(pop(pop(stack)), top(stack) * top(pop(stack)) ))),
+                    ("mod",5, (fn stack => push(pop(pop(stack)), Real.fromInt((Real.trunc(top(stack)) mod Real.trunc(top(pop(stack))))) ))),
+                    ("%",5,   (fn stack => push(pop(pop(stack)), Real.fromInt((Real.trunc(top(stack)) mod Real.trunc(top(pop(stack))))) )))(*
+                    ("^",6,   (fn stack => push(pop(pop(stack)), top(stack) ^ top(pop(stack)) ))), 
+                    ("!",6,   (fn stack => push(pop(pop(stack)), top(stack) ! top(pop(stack)) )))*)];
 
 
 (* getPriority(token)
@@ -36,15 +48,15 @@ val operatorList = [("+",4),("-",4),("/",5),("*",5),("mod",5),("%",5), ("^",6), 
 *)
 fun getPriority (Operator(name)) =
     let
-      val found = (List.find (fn (operator, _) => name = operator) operatorList)
-      val (_, priority) = valOf(found)
+      val found = (List.find (fn (operator, _, _) => name = operator) operatorList)
+      val (_, priority, _) = valOf(found)
     in
       priority
     end
   | getPriority(Function(name)) =
       let
-        val found = (List.find (fn (function, _) => name = function) functionList)
-        val (_, priority) = valOf(found)
+        val found = (List.find (fn (function, _, _) => name = function) functionList)
+        val (_, priority, _) = valOf(found)
       in
         priority
       end
@@ -58,7 +70,7 @@ fun getPriority (Operator(name)) =
    EXAMPLE: isOperator("mod")  = true
             isOperator("bacon") = false
 *)
-fun isOperator(str) = List.exists (fn (operator, _) => str = operator) operatorList;
+fun isOperator(str) = List.exists (fn (operator, _, _) => str = operator) operatorList;
 
 
 (* isSymbolicOperator(c)

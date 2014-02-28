@@ -1,7 +1,7 @@
 (* TODO: why double representation of empty stack? *)
 exception EmptyStackException;
 
-datatype stack = EmptyStack | Stack of token list
+datatype 'a stack = EmptyStack | Stack of 'a list
 
 fun pop(EmptyStack) = raise EmptyStackException
   | pop(Stack([]))  = raise EmptyStackException	

@@ -1,7 +1,7 @@
 (* include files and start Abacus! *)
 use "datatypes.sml";
-use "functions.sml";
 use "stack.sml";
+use "functions.sml";
 use "lexical_analyzer.sml";
 use "postFix.sml";
 use "input.sml";
