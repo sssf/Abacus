@@ -18,5 +18,17 @@ datatype token = Number   of string
 
 
 
-
-
+(* format(list)
+   TYPE: token list -> string
+   PRE:  true
+   POST: token list as string
+   EXAMPLE: TODO
+*)
+fun format([])                 = "\n"
+  | format(Number(id)::tail)   = " "^id^format(tail)
+  | format(Variable(id)::tail) = " "^id^format(tail)
+  | format(Function(id)::tail) = " "^id^format(tail)
+  | format(Operator(id)::tail) = " "^id^format(tail)
+  | format(Open::tail)         = " ("^format(tail)
+  | format(Closed::tail)       = " )"^format(tail)
+  | format(_) = raise Fail "FAIL";

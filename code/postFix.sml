@@ -34,7 +34,8 @@ fun toPostFix(l) =
           val (prio) = getPriority(Operator(opr))
           val (prio') = if top(s) <> Open then getPriority(top(s)) else 0
         in
-          (print("Checking priority \n");if prio' >= prio then
+          (print("Checking priority \n");
+          if prio' > prio then
             (print("    operator on stack is higher than input \n");toPostFix'( Operator(opr)::xs, pop(s), top(s)::q))
           else
             (print("    Input have higher priority \n");toPostFix'(xs, push(s, Operator(opr)), q)))
