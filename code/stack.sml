@@ -1,3 +1,8 @@
+(* REPRESENTATION CONVENTION: EmptyStack is a stack with no elements
+                              Stack('a list) is a stack of elements with type 'a
+
+   REPRESENTATION INVARIAN: TODO: None?
+*)
 exception EmptyStackException;
 
 datatype 'a stack = EmptyStack | Stack of 'a list
