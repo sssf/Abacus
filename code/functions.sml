@@ -41,10 +41,10 @@ fun operatorFunction func stack = push(pop(pop(stack)), func(top(stack),top(pop(
    VALUE: list of Operators and their priorities
    TODO: add functions
 *)
-val operatorList = [("+",4,   operatorFunction (fn (x,y) => x+y)),
-                    ("-",4,   operatorFunction (fn (x,y) => y-x)),
-                    ("/",5,   operatorFunction (fn (x,y) => y/x)),
-                    ("*",5,   operatorFunction (fn (x,y) => x*y)),
+val operatorList = [("+",4,   operatorFunction (fn (x,y) => x + y)),
+                    ("-",4,   operatorFunction (fn (x,y) => y - x)),
+                    ("/",5,   operatorFunction (fn (x,y) => y / x)),
+                    ("*",5,   operatorFunction (fn (x,y) => x * y)),
                     ("mod",5, operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
                     ("%",5,   operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
                     ("^",6,   operatorFunction (fn (y,x) => Math.pow(x,y) ))(*, 
