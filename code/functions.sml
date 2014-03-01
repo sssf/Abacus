@@ -25,15 +25,14 @@ fun isFunction(str) = List.exists (fn (function,_ , _ ) => str = function) funct
    TODO: add functions
 *)
 
-(* Failed attempt
-  fun operatorFunction (stack, func) = (push(pop(pop(stack), func(top(stack),top(pop(stack))) )));*)
+fun operatorFunction func stack = push(pop(pop(stack)), func(top(stack),top(pop(stack))) );
 
-val operatorList = [("+",4,   (fn stack => push(pop(pop(stack)), top(stack) + top(pop(stack)) ))),
-                    ("-",4,   (fn stack => push(pop(pop(stack)), top(stack) - top(pop(stack)) ))),
-                    ("/",5,   (fn stack => push(pop(pop(stack)), top(stack) / top(pop(stack)) ))),
-                    ("*",5,   (fn stack => push(pop(pop(stack)), top(stack) * top(pop(stack)) ))),
-                    ("mod",5, (fn stack => push(pop(pop(stack)), Real.fromInt((Real.trunc(top(stack)) mod Real.trunc(top(pop(stack))))) ))),
-                    ("%",5,   (fn stack => push(pop(pop(stack)), Real.fromInt((Real.trunc(top(stack)) mod Real.trunc(top(pop(stack))))) )))(*
+val operatorList = [("+",4,   (fn (x,y) => x+y)),
+                    ("-",4,   (fn (x,y) => x-y)),
+                    ("/",5,   (fn (x,y) => x/y)),
+                    ("*",5,   (fn (x,y) => x*y)),
+                    ("mod",5, (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
+                    ("%",5,   (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y))))(*
                     ("^",6,   (fn stack => push(pop(pop(stack)), top(stack) ^ top(pop(stack)) ))), 
                     ("!",6,   (fn stack => push(pop(pop(stack)), top(stack) ! top(pop(stack)) )))*)];
 
