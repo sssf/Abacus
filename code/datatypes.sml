@@ -12,6 +12,7 @@ datatype token = Number   of string
                | Function of string
                | Operator of string
                | Assigment
+               | Negate
                | Open
                | Closed
 
