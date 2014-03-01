@@ -3,9 +3,14 @@
    VALUE: list of functions and their priorities
    TODO: add function
 *)
-val functionList = [("sin", 42, (fn stack => push(pop(stack),Math.sin(top(stack))))),
-                    ("sqrt", 42, (fn stack => push(pop(stack),Math.sqrt(top(stack))))), 
-                    ("cos", 42,  (fn stack => push(pop(stack),Math.cos(top(stack)))))];
+val functionList = [("sin",  42, (fn stack => push(pop(stack),Math.sin(top(stack))))),
+                    ("sqrt", 42, (fn stack => push(pop(stack),Math.sqrt(top(stack))))),
+                    ("log",  42, (fn stack => push(pop(stack),Math.log10(top(stack))))),
+                    ("ln",   42, (fn stack => push(pop(stack),Math.ln(top(stack))))),
+                    ("min",  42, (fn stack => push(pop(stack),Real.min(top(pop(stack)),top(stack))))),
+                    ("max",  42, (fn stack => push(pop(stack),Real.max(top(pop(stack)),top(stack))))),
+                    ("abs",  42, (fn stack => push(pop(stack),Real.abs(top(stack))))),
+                    ("cos",  42, (fn stack => push(pop(stack),Math.cos(top(stack)))))];
 
 (* isFunction(str)
    TYPE: string -> bool
@@ -42,8 +47,8 @@ val operatorList = [("+",4,   operatorFunction (fn (x,y) => x+y)),
                     ("*",5,   operatorFunction (fn (x,y) => x*y)),
                     ("mod",5, operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
                     ("%",5,   operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
-                    ("^",6,   operatorFunction (fn (x,y) => Math.pow(x,y) ))(*, 
-                    ("!",6,   (fn stack => push(pop(pop(stack)), top(stack) ! top(pop(stack)) )))*)];
+                    ("^",6,   operatorFunction (fn (y,x) => Math.pow(x,y) ))(*, 
+                    ("!",6,   operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))))*)];
 
 
 (* getPriority(token)
