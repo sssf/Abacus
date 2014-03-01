@@ -4,7 +4,7 @@ use "stack.sml";
 use "functions.sml";
 use "evaluate.sml";
 use "lexical_analyzer.sml";
-use "postFix.sml";
+use "postfix.sml";
 use "input.sml";
 
 
@@ -19,7 +19,7 @@ fun main () =
   let
     val str = input("Enter expression: ")
   in
-    str = "exit" orelse (print(format ([evaluate(toPostFix(tokenize(str)),EmptyStack)]) ); main())
+    str = "exit" orelse (print(format ([evaluate(toPostfix(tokenize(str)),EmptyStack)]) ); main())
   end;
 
 
