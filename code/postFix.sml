@@ -1,17 +1,9 @@
-
-(* test
-   TYPE: token list
-   VALUE: infix test expresion
-*)
-val test = [Number("3"), Operator("+"), Number("4"), Operator("*"), Number("2"), Operator("/"),
-            Open, Number("1"), Operator("-"), Number("5"), Closed, Operator("^"), Number("2"), Operator("^"), Number("3")];
-
 (* toPostfix(l)
    TYPE: token list -> token list
-   PRE:  TODO
-   POST: TODO
-   VARIANT: TODO
-   EXAMPLE: TODO
+   PRE:  l is a valid expression
+   POST: elements of l rearranged from infix to postfix notation.
+   VARIANT: length of l
+   EXAMPLE: toPostFix([Number("1"),Operator("+"),Number("2")]) = [Number("1"),Number("2"),Operator("+")]
 *)
 fun toPostFix(l) =
   let
@@ -44,6 +36,3 @@ fun toPostFix(l) =
   in
     List.rev(toPostFix'(l,EmptyStack,[]))
   end;
-
-
-(*evaluate(queueToList(toPostFix'(formatInput(explode(str)),emptyStack,emptyQueue)),emptyStack);*)
