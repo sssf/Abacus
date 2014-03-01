@@ -35,13 +35,22 @@ fun operatorFunction func stack = push(pop(pop(stack)), func(top(stack),top(pop(
    VALUE: list of Operators and their priorities
    TODO: add functions
 *)
-val operatorList = [("+",4,   (fn (x,y) => x+y)),
-                    ("-",4,   (fn (x,y) => x-y)),
-                    ("/",5,   (fn (x,y) => x/y)),
-                    ("*",5,   (fn (x,y) => x*y)),
-                    ("mod",5, (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
-                    ("%",5,   (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
-                    ("^",6,   (fn (x,y) => Math.pow(x,y) ))(*, 
+
+fun stringToReal(str) =
+  let
+    val r = Real.fromString(str)
+  in
+    valOf(r)
+  end;
+
+val operatorList = [("+",4,   operatorFunction (fn (Number(x),Number(y)) => Number( Real.toString(stringToReal(x) + stringToReal(y)) ))),
+                    ("-",4,   operatorFunction (fn (Number(x),Number(y)) => Number( Real.toString(stringToReal(x) - stringToReal(y)) ))),
+                    ("/",5,   operatorFunction (fn (Number(x),Number(y)) => Number( Real.toString(stringToReal(x) / stringToReal(y)) ))),
+                    ("*",5,   operatorFunction (fn (Number(x),Number(y)) => Number( Real.toString(stringToReal(x) * stringToReal(y)) )))
+(*)
+                    ("mod",5, operatorFunction (fn (Number(x),Number(y)) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
+                    ("%",5,   operatorFunction (fn (Number(x),Number(y)) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
+                    ("^",6,   operatorFunction (fn (Number(x),Number(y)) => Math.pow(x,y) ))*)(*, 
                     ("!",6,   (fn stack => push(pop(pop(stack)), top(stack) ! top(pop(stack)) )))*)];
 
 
@@ -68,6 +77,31 @@ fun getPriority (Operator(name)) =
         priority
       end
   | getPriority(_) = raise Fail "expected Function or Operator token";
+
+
+(* getFunction token
+   TYPE: token -> (real * real -> real)
+   PRE:  token exist in operatorList or functionList
+   POST: anonymous function of operator or function
+   SIDE-EFFECTS: raises Fail exception if token isn't a Function or Operator
+   EXAMPLE: getPriority(Operator("+"))   = fn (x,y) => x+y)
+            getPriority(Function("sin")) = Math.sin()
+*)
+fun getFunction (Operator(name)) =
+    let
+      val found = (List.find (fn (operator, _, _) => name = operator) operatorList)
+      val (_, _, function) = valOf(found)
+    in
+      function
+    end
+  | getFunction(Function(name)) =
+      let
+        val found = (List.find (fn (function, _, _) => name = function) functionList)
+        val (_, _, f) = valOf(found)
+      in
+        f
+      end
+  | getFunction(_) = raise Fail "expected Function or Operator token";
 
 
 (* isOperator(str)
