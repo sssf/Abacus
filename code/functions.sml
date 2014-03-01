@@ -6,7 +6,6 @@
 val functionList = [("sin", 42, (fn stack => push(pop(stack),Math.sin(top(stack))))), 
                     ("cos", 42,  (fn stack => push(pop(stack),Math.cos(top(stack)))))];
 
-
 (* isFunction(str)
    TYPE: string -> bool
    PRE:  true
@@ -17,23 +16,32 @@ val functionList = [("sin", 42, (fn stack => push(pop(stack),Math.sin(top(stack)
 fun isFunction(str) = List.exists (fn (function,_ , _ ) => str = function) functionList;
 
 
-(* NOTE: ! operator is postfix!? *)
+(* operatorFunction f s
+   TYPE: ('a * 'a -> 'a) -> 'a stack -> 'a stack
+   PRE: true (>>>>>?<<<<<)
+   POST: a stack with the two first elements popped off 
+         and replaced with the result of function f applied to the two
+         popped elements
+*)
+fun operatorFunction func stack = push(pop(pop(stack)), func(top(stack),top(pop(stack))) );
+
+
+(* NOTE: ! operator is postfix!?
+         How is ! defined for real numbers? 
+         ! can raise exceptions*)
 
 (* operatorList
    TYPE: (string * int) list
    VALUE: list of Operators and their priorities
    TODO: add functions
 *)
-
-fun operatorFunction func stack = push(pop(pop(stack)), func(top(stack),top(pop(stack))) );
-
 val operatorList = [("+",4,   (fn (x,y) => x+y)),
                     ("-",4,   (fn (x,y) => x-y)),
                     ("/",5,   (fn (x,y) => x/y)),
                     ("*",5,   (fn (x,y) => x*y)),
                     ("mod",5, (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
-                    ("%",5,   (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y))))(*
-                    ("^",6,   (fn stack => push(pop(pop(stack)), top(stack) ^ top(pop(stack)) ))), 
+                    ("%",5,   (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
+                    ("^",6,   (fn (x,y) => Math.pow(x,y) ))(*, 
                     ("!",6,   (fn stack => push(pop(pop(stack)), top(stack) ! top(pop(stack)) )))*)];
 
 
