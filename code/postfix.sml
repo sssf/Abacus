@@ -3,7 +3,7 @@
    PRE:  l is a valid expression
    POST: elements of l rearranged from infix to postfix notation.
    VARIANT: length of l
-   EXAMPLE: toPostFix([Number("1"),Operator("+"),Number("2")]) = [Number("1"),Number("2"),Operator("+")]
+   EXAMPLE: toPostfix([Number("1"),Operator("+"),Number("2")]) = [Number("1"),Number("2"),Operator("+")]
 *)
 fun toPostfix(l) =
   let

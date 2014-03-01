@@ -4,7 +4,7 @@ use "stack.sml";
 use "functions.sml";
 use "evaluate.sml";
 use "lexical_analyzer.sml";
-use "postFix.sml";
+use "postfix.sml";
 use "input.sml";
 
 
