@@ -3,7 +3,8 @@
    VALUE: list of functions and their priorities
    TODO: add function
 *)
-val functionList = [("sin", 42, (fn stack => push(pop(stack),Math.sin(top(stack))))), 
+val functionList = [("sin", 42, (fn stack => push(pop(stack),Math.sin(top(stack))))),
+                    ("sqrt", 42, (fn stack => push(pop(stack),Math.sqrt(top(stack))))), 
                     ("cos", 42,  (fn stack => push(pop(stack),Math.cos(top(stack)))))];
 
 (* isFunction(str)
@@ -35,22 +36,13 @@ fun operatorFunction func stack = push(pop(pop(stack)), func(top(stack),top(pop(
    VALUE: list of Operators and their priorities
    TODO: add functions
 *)
-
-fun stringToReal(str) =
-  let
-    val r = Real.fromString(str)
-  in
-    valOf(r)
-  end;
-
-val operatorList = [("+",4,   operatorFunction (fn (Number(x),Number(y)) => Number( Real.toString(stringToReal(x) + stringToReal(y)) ))),
-                    ("-",4,   operatorFunction (fn (Number(x),Number(y)) => Number( Real.toString(stringToReal(x) - stringToReal(y)) ))),
-                    ("/",5,   operatorFunction (fn (Number(x),Number(y)) => Number( Real.toString(stringToReal(x) / stringToReal(y)) ))),
-                    ("*",5,   operatorFunction (fn (Number(x),Number(y)) => Number( Real.toString(stringToReal(x) * stringToReal(y)) )))
-(*)
-                    ("mod",5, operatorFunction (fn (Number(x),Number(y)) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
-                    ("%",5,   operatorFunction (fn (Number(x),Number(y)) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
-                    ("^",6,   operatorFunction (fn (Number(x),Number(y)) => Math.pow(x,y) ))*)(*, 
+val operatorList = [("+",4,   operatorFunction (fn (x,y) => x+y)),
+                    ("-",4,   operatorFunction (fn (x,y) => y-x)),
+                    ("/",5,   operatorFunction (fn (x,y) => y/x)),
+                    ("*",5,   operatorFunction (fn (x,y) => x*y)),
+                    ("mod",5, operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
+                    ("%",5,   operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
+                    ("^",6,   operatorFunction (fn (x,y) => Math.pow(x,y) ))(*, 
                     ("!",6,   (fn stack => push(pop(pop(stack)), top(stack) ! top(pop(stack)) )))*)];
 
 

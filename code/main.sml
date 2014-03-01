@@ -19,7 +19,7 @@ fun main () =
   let
     val str = input("Enter expression: ")
   in
-    str = "exit" orelse (print(format(toPostFix(tokenize(str)))); main())
+    str = "exit" orelse (print(format ([evaluate(toPostFix(tokenize(str)),EmptyStack)]) ); main())
   end;
 
 
