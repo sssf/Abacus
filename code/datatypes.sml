@@ -32,6 +32,7 @@ fun format([])                 = "\n"
   | format(Function(id)::tail) = " "^id^format(tail)
   | format(Operator(id)::tail) = " "^id^format(tail)
   | format(Assigment::tail)    = " ="^format(tail)
+  | format(Negate::tail)       = " ~"^format(tail)
   | format(Open::tail)         = " ("^format(tail)
   | format(Closed::tail)       = " )"^format(tail)
   | format(_) = raise Fail "FAIL";
