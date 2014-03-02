@@ -25,6 +25,19 @@ local
     else
       Variable(str);
 
+  (* fixNegation(tokens)
+     TYPE: token list -> token list
+     PRE:  true
+     POST: tokens with negation corrected
+     VARIANT: |tokens|
+     EXAMPLE: TODO
+  *)
+  fun fixNegation([]) = []
+    | fixNegation([token]) = [token]
+    | fixNegation(Operator(x)::Operator("-")::rest) = Operator(x)::Negate::fixNegation(rest)
+    | fixNegation(Function(x)::Operator("-")::rest) = Function(x)::Negate::fixNegation(rest)
+    | fixNegation(head::tail) = head::fixNegation(tail);
+
 
   (* start(charList)
      TYPE: char list -> token list
@@ -152,6 +165,6 @@ in
      POST: list of tokens in str
      EXAMPLE: tokenize("2 * sin(x)") = [Number("2"), Operator("*"), Function("sin"), Open, Variable("x"), Closed]
   *)
-  fun tokenize(str) = start(explode(str))
+  fun tokenize(str) = fixNegation(start(explode(str)))
 
 end;
