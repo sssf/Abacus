@@ -3,14 +3,16 @@
    VALUE: list of functions and their priorities
    TODO: add function
 *)
-val functionList = [("sin",  42, (fn stack => push(pop(stack),Math.sin(top(stack))))),
-                    ("sqrt", 42, (fn stack => push(pop(stack),Math.sqrt(top(stack))))),
-                    ("log",  42, (fn stack => push(pop(stack),Math.log10(top(stack))))),
-                    ("ln",   42, (fn stack => push(pop(stack),Math.ln(top(stack))))),
-                    ("min",  42, (fn stack => push(pop(stack),Real.min(top(pop(stack)),top(stack))))),
-                    ("max",  42, (fn stack => push(pop(stack),Real.max(top(pop(stack)),top(stack))))),
-                    ("abs",  42, (fn stack => push(pop(stack),Real.abs(top(stack))))),
-                    ("cos",  42, (fn stack => push(pop(stack),Math.cos(top(stack)))))];
+val functionList = [("sin",   9, (fn stack => push(pop(stack),Math.sin(top(stack))))),
+                    ("sqrt",  9, (fn stack => push(pop(stack),Math.sqrt(top(stack))))),
+                    ("log",   9, (fn stack => push(pop(stack),Math.log10(top(stack))))),
+                    ("ln",    9, (fn stack => push(pop(stack),Math.ln(top(stack))))),
+                    ("min",   9, (fn stack => push(pop(stack),Real.min(top(pop(stack)),top(stack))))),
+                    ("max",   9, (fn stack => push(pop(stack),Real.max(top(pop(stack)),top(stack))))),
+                    ("abs",   9, (fn stack => push(pop(stack),Real.abs(top(stack))))),
+                    ("cos",   9, (fn stack => push(pop(stack),Math.cos(top(stack))))),
+                    ("negate",8, (fn stack => push(pop(stack),~1.0*(top(stack)))))];
+
 
 (* isFunction(str)
    TYPE: string -> bool
