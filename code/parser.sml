@@ -1,7 +1,6 @@
 use "datatypes.sml";
 
 
-
 fun E(list) =
   let
     val _ = print "E\n"
@@ -40,7 +39,7 @@ and N(list) =
   end
 
 
-and T(list) = 
+and T(list) =
   let
     val _ = print "T\n"
     val (test, l) = t0(list)
