@@ -19,7 +19,6 @@ fun E(list) =
           (false, l)
       end
   end
-  | E([]) = (false, [])
   
 
 and N(list) = 
@@ -39,7 +38,6 @@ and N(list) =
           (false, l)
       end
   end
-  | N([]) = (false, [])
 
 
 and T(list) = 
@@ -59,14 +57,13 @@ and T(list) =
           (false, l)
       end
   end
-  | T([]) = (false, [])
 
 
 
 and t0 (Number(_)::tail) = (true, tail)
   | t0 (list)            = (false, list)
 
-and t1(Function(_)::tail) = E(tail)
+and t1(Function(_)::tail) = N(tail)
   | t1(list)              = (false, list)
 
 and t2(Open::tail) =
