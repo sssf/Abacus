@@ -34,5 +34,4 @@ fun format([])                 = "\n"
   | format(Assigment::tail)    = " ="^format(tail)
   | format(Negate::tail)       = " ~"^format(tail)
   | format(Open::tail)         = " ("^format(tail)
-  | format(Closed::tail)       = " )"^format(tail)
-  | format(_) = raise Fail "FAIL";
+  | format(Closed::tail)       = " )"^format(tail);
