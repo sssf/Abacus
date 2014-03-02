@@ -1,5 +1,6 @@
 (* include files and start Abacus! *)
 use "datatypes.sml";
+use "enviroment.sml";
 use "stack.sml";
 use "functions.sml";
 use "evaluate.sml";
