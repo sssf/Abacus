@@ -32,12 +32,19 @@ local
      VARIANT: |tokens|
      EXAMPLE: TODO
   *)
-  fun fixNegation([]) = []
-    | fixNegation([token]) = [token]
-    | fixNegation(Operator(x)::Operator("-")::rest) = Operator(x)::Negate::fixNegation(rest)
-    | fixNegation(Function(x)::Operator("-")::rest) = Function(x)::Negate::fixNegation(rest)
-    | fixNegation(head::tail) = head::fixNegation(tail);
-
+  fun fixNegation(Operator("-")::rest) = fixNegation(Negate::rest)
+    | fixNegation(tokens) =
+    let
+      fun fixNegation'([]) = []
+        | fixNegation'([token]) = [token]
+        | fixNegation'(Operator(x)::Operator("-")::rest) = Operator(x)::fixNegation'(Negate::rest)
+        | fixNegation'(Negate::Operator("-")::rest) = Negate::fixNegation'(Negate::rest) (* micael really wanted support for --...-x *)
+        | fixNegation'(Function(x)::Operator("-")::rest) = Function(x)::fixNegation'(Negate::rest)
+        | fixNegation'(Open::Operator("-")::rest) = Open::fixNegation'(Negate::rest)
+        | fixNegation'(head::tail) = head::fixNegation'(tail);
+    in
+      fixNegation'(tokens)
+    end;
 
   (* start(charList)
      TYPE: char list -> token list
