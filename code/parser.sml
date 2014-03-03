@@ -35,10 +35,10 @@ local
             (false, list)
         end
     end
-    
+
 
   and N([]) = (print("N: false\n");(false, []))
-    | N(list) = 
+    | N(list) =
     let
       val _ = print ("N: "^str(list)^input(" $:"))
       val _ = print("N: test0\n")
@@ -117,7 +117,7 @@ local
     | n1(list)         = (print("negate: false \n"); (false, list))
 
 
-  and e0(list) = 
+  and e0(list) =
     let
       val _ = print ("e0: test0 \n")
       val (test, l) = N(list)
@@ -143,17 +143,19 @@ local
       else
         (false, list)
     end
-        
+
 
   and e1(list) = (print("e1: \n"); N(list));
 
 in
+
   fun validate(tokens) =
     let
       val (test, l) = E(tokens)
     in
       test andalso l = []
     end
+
 end;
 
 
