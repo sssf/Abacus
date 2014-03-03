@@ -1,6 +1,6 @@
 (* include files and start Abacus! *)
-use "datatypes.sml";
 use "enviroment.sml";
+use "datatypes.sml";
 use "stack.sml";
 use "functions.sml";
 use "evaluate.sml";
@@ -16,11 +16,12 @@ use "input.sml";
    VARIANT: user types "exit"
    EXAMPLE: main() = true
 *)
-fun main () =
+fun main (env) =
   let
     val str = input("Enter expression: ")
+    val env = evaluate(toPostfix(tokenize(str)),EmptyStack,env)
   in
-    str = "exit" orelse (print(format ([evaluate(toPostfix(tokenize(str)),EmptyStack)]) ); main())
+    str = "exit" orelse (print(format (env) ); main(env))
   end;
 
 

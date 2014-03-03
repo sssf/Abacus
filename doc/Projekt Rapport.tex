@@ -1,62 +1,80 @@
+
 \documentclass[12pt,a4paper]{article}
-\usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage[swedish]{babel}
-\usepackage{fullpage}
+\usepackage[]{fullpage}
 \usepackage{graphicx}
 
-\begin{document}
-\title{Text-Based Calculator in SML}
+
+\title {Abacus \\ Interpreter for mathematical expressions in SML}
 \author{
-  V√•gbratt, Tommy
+  VÂgbratt, Tommy
   \and
   Loberg, Micael
 	\and
   Jin, Wenting}
 \date{\today}
+
+
+\begin{document}
+
 \maketitle
 \tableofcontents
 \newpage
 
 
 \section{Introduction}
-\textnormal{A calculator that takes mathematical expressions in text form may sound nothing special, but one may have encountered difficulties to find the right symbol to express trigonometric related functions such as "sin","pi" etc, on a typing-in calculator. However, this calculator performs just as well as "normal" ones, but can evaluate a whole mathematical expression that is just based on text! No more time wasting looking up symbols. Interesting? Well, it's just a calculator.}
+\textnormal{A tool that takes mathematical expressions in text form may sound nothing special, but one may have encountered difficulties to find the right symbol to express trigonometric related functions such as "sin","pi" etc, on a typing-in calculator. However, this tool performs just as well as "normal" calculators, but can evaluate a whole mathematical expression that is just based on text! No more time wasting looking up symbols. Interesting? Well, it's just a "calculator".}
 
-\section{Calculator in SML}
+\section{"Calculator" in SML}
 \subsection{Design and Structure}
-\textnormal{}
+\textnormal{Input, Compiler and Virtual Machine are three major parts of the system. All these parts are strictly serial between  each other. All steps inside a part are to build preparation work for next part, and all three parts form a sucessive execution. Executions can be achieved once or recursively per user's need. \newline Stack structure as abstract datatype is used. }
+\subsubsection{Structure Overview}
+\begin{description}
+  \item [Input] \hfill \\ handles merely input text , checks if content other than whitespace is input and passes input onto Compiler
+  \item [Compiler] \hfill
+    \begin{itemize}
+      \item Tokenizer: split input text into expression of tokens tagged as Number, Variable, Function, Operator, Assignment, Negatation, Open or Close parenthesis
+      \item Validate: statement check on tokens, to ensure expression is valid, but careless of priority of the functions/operators 
+      \item Postfix: convert tokens into a reversed order list of number with priority handled
+      \end{itemize}    
+  \item [Virtual Machine] \hfill \\
+    virtual machine (stack based, num pushed onto stack; processcor\footnote{functions are treated the same way as operators in a virtual machine,} encountered,takes item from stack;)
+\end{description}
+
+
 \iffalse
 En mer detaljerad beskrivning (design)
-‚Ä¢ Vilka delar best√•r systemet av? Hur samverkar de f√∂r att l√∂sa problemet?
-‚Ä¢ Vilka datastrukturer anv√§nds? Beskriv abstrakta datatyper (gr√§nssnitt/interface)
+- Vilka delar bestÂr systemet av? Hur samverkar de fˆr att lˆsa problemet?
+
+- Vilka datastrukturer anv‰nds? Beskriv abstrakta datatyper (gr‰nssnitt/interface)
 \fi
 
 \subsection{Algorithms and Alternatives}
 \textnormal{}
 \iffalse
-Smarta l√∂sningar (algoritmer)
-‚Ä¢ Beskriv viktiga funktioner Designval
-‚Ä¢ Finns alternativa s√§tt att l√∂sa problemet? Varf√∂r valde du det h√§r s√§ttet?
-‚Ä¢ Konsekvenser av dina val
+Smarta lˆsningar (algoritmer)
+- Beskriv viktiga funktioner Designval
+- Finns alternativa s‰tt att lˆsa problemet? Varfˆr valde du det h‰r s‰ttet?
+- Konsekvenser av dina val
 \fi
 
 \subsection{Implementation}
 \textnormal{}
 \iffalse
-‚Ä¢ Intressanta detaljer
-‚Ä¢ Fungerar programmet? Hur vet du det?
-‚Ä¢ Finns det saker som inte fungerar, fall som inte hanteras?
-‚Ä¢ √Ñr programmet effektivt?
+- Intressanta detaljer
+- Fungerar programmet? Hur vet du det?
+- Finns det saker som inte fungerar, fall som inte hanteras?
+- √Ñr programmet effektivt?
 \fi
 
 \subsection{General Analysis}
 \textnormal{}
 \iffalse
 Analys/diskussion
-‚Ä¢ Vilka √§r systemets styrkor/svagheter? -> Sustainability
-‚Ä¢ Blev det bra? Skulle du ha gjort n√•got annorlunda om du skulle b√∂rja om? -> Sustainability
-‚Ä¢ T√§nkbara vidareutvecklingar -> Furture Development
+- Vilka √r systemets styrkor/svagheter? -> Sustainability
+- Blev det bra? Skulle du ha gjort nÂgot annorlunda om du skulle bˆrja om? -> Sustainability
+- T‰nkbara vidareutvecklingar -> Furture Development
 \fi
 
 \subsubsection{Sustainability}
@@ -68,21 +86,23 @@ Analys/diskussion
 \section{Brief Conclusion}
 \textnormal{}
 \iffalse
-‚Ä¢ Avslutning: Sammanfattning, diskussion, slutsatser
+- Avslutning: Sammanfattning, diskussion, slutsatser
 \fi
 
 \section{Simple Guide for Simple Calculator}
 \textnormal{}
 \iffalse
-‚Ä¢ Anv√§ndarhandledning med exempel (use cases)
+- Anv‰ndarhandledning med exempel (use cases)
 \fi
 
+
+
 \begin{thebibliography}{breitestes Label}
-\bibitem{%cite tag}
+\bibitem{}
   % info...
-  \emph{% title}
+  \emph{}
 	
-\bibitem{} \url{%link}
+\bibitem{}
 	
 \end{thebibliography}
 

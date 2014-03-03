@@ -26,7 +26,8 @@ datatype token = Number   of string
    POST: token list as string
    EXAMPLE: TODO
 *)
-fun format([])                 = "\n"
+fun format(enviroment) = Real.toString(getValue(enviroment,"ans"))^"\n";(*) 
+  format([])                 = "\n"
   | format(Number(id)::tail)   = id^" "^format(tail)
   | format(Variable(id)::tail) = id^" "^format(tail)
   | format(Function(id)::tail) = id^" "^format(tail)
@@ -34,4 +35,4 @@ fun format([])                 = "\n"
   | format(Assigment::tail)    = "= "^format(tail)
   | format(Negate::tail)       = "~"^format(tail)
   | format(Open::tail)         = "("^format(tail)
-  | format(Closed::tail)       = ") "^format(tail);
+  | format(Closed::tail)       = ") "^format(tail);*)
