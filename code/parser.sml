@@ -1,3 +1,4 @@
+use "enviroment.sml";
 use "datatypes.sml";
 use "stack.sml";
 use "functions.sml";
@@ -5,161 +6,257 @@ use "lexical_analyzer.sml";
 use "input.sml";
 
 
+(* recursive-descent parser implmenenting the following language:
+
+    E -> Variable = E | N Operator E | N
+    N -> T | -T
+    T -> Number | Variable | Function N | (E)
+
+  where Open = "(", Closed = ")" and Negate = "-"
+*)
 local
 
-  fun str([]) = ""
-    | str(head::tail) = "x,"^str(tail);
 
-
-  fun input(s) = "\n";
-
-
-
-  fun E([])   = (print("E: false\n"); (false, []))
-    | E(list) =
+  (* E(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens if tokens are a valid construct of "E", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  fun E ([])     = (false, [])
+    | E (tokens) =
     let
-      val _ = print ("E: "^str(list)^input("> "))
-      val _ = print("E: test0\n")
-      val (test, l) = e0(list)
+      val (test, l) = e0(tokens) (* "Variable = E" *)
     in
-      if test(* andalso l = []*) then
+      if test  then
         (true, l)
       else
         let
-          val _ = print("E: test1\n")
-          val (test, l) = e1(list)
-        in
-          if test(* andalso l = []*) then
-            (true, l)
-          else
-            (false, list)
-        end
-    end
-
-
-  and N([]) = (print("N: false\n");(false, []))
-    | N(list) =
-    let
-      val _ = print ("N: "^str(list)^input(" $:"))
-      val _ = print("N: test0\n")
-      val (test, l) = n0(list)
-    in
-      if test then
-        (true, l)
-      else
-        let
-          val _ = print("N: test1\n")
-          val (test, l) = n1(list)
-        in
-          if test then
-            (true, l)
-          else
-            (false, list)
-        end
-    end
-
-
-  and T([]) = (print("T: false\n"); (false, []))
-    | T(list) =
-    let
-      val _ = print ("T: "^str(list)^input("> "))
-      val _ = print("T: test0\n")
-      val (test, l) = t0(list)
-    in
-      if test then
-        (true, l)
-      else
-        let
-          val _ = print("T: test1\n")
-          val (test, l) = t1(list)
+          val (test, l) = e1(tokens) (* "N operator E" *)
         in
           if test then
             (true, l)
           else
             let
-              val _ = print("T: test2\n")
-              val (test, l) = t2(list)
+              val (test, l) = e2(tokens) (* "N" *)
             in
               if test then
                 (true, l)
               else
-                (false, list)
+                (false, tokens)
             end
         end
     end
 
 
-
-  and t0 (Number(_)::tail) = (print("num: true\n"); (true, tail))
-    | t0 (Variable(_)::tail) = (print("var: true\n"); (true, tail))
-    | t0 (list)            = (print("num: false\n"); (false, list))
-
-  and t1(Function(_)::tail) = (print("fun: \n"); N(tail))
-    | t1(list)              = (print("fun: false\n"); (false, list))
-
-  and t2(Open::tail) =
+  (* N(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens if tokens are a valid construct of "N", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and N([]) = (false, [])
+    | N(tokens) =
     let
-      val _ = print("t2: open\n")
-      fun close(Closed::tail) = (true, tail)
-        | close(list)         = (false, list)
-      val test = E(tail)
+      val (test, l) = n0(tokens) (* T *)
     in
-      if #1(test) then
-        close(#2(test))
+      if test then
+        (true, l)
       else
-        (false, Open::tail)
+        let
+          val (test, l) = n1(tokens) (* -T *)
+        in
+          if test then
+            (true, l)
+          else
+            (false, tokens)
+        end
     end
-    | t2(list) = (false, list)
-
-  and n0(list) = T(list)
-
-  and n1(Negate::tail) = (print("negate: \n"); T(tail))
-    | n1(list)         = (print("negate: false \n"); (false, list))
 
 
-  and e0(list) =
+  (* T(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens if tokens are valid construct of "T", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and T([]) = (false, [])
+    | T(tokens) =
     let
-      val _ = print ("e0: test0 \n")
-      val (test, l) = N(list)
+      val (test, l) = t0(tokens) (* "number | variable" *)
+    in
+      if test then
+        (true, l)
+      else
+        let
+          val (test, l) = t1(tokens) (* "Function N" *)
+        in
+          if test then
+            (true, l)
+          else
+            let
+              val (test, l) = t2(tokens) (* "(E)" *)
+            in
+              if test then
+                (true, l)
+              else
+                (false, tokens)
+            end
+        end
+    end
+
+
+  (* e0(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens if tokens are a valid construct of "Variable = E", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and e0(Variable(_)::Assigment::rest) = E(rest)   (* Variable = E *)
+    | e0(tokens)                       = (false, tokens)
+
+
+  (* e1(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens if tokens are a valid construct of "N Operator E", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and e1(tokens) =  (* N operator E *)
+    let
+      val (test, l) = N(tokens)
     in
       if test then
         let
-          val _ = print("e0: test1\n")
-          val (test, l) = case l of Operator(_)::tail => (true, tail) | list => (false, list)
+          val (test, l) = case l of Operator(_)::rest => (true, rest) | tokens => (false, tokens)
         in
           if test then
             let
-              val _ = print("e0: test2\n")
               val (test, l) = E(l)
             in
               if test then
                 (true, l)
               else
-                (false, list)
+                (false, tokens)
             end
           else
-            (false, list)
+            (false, tokens)
         end
       else
-        (false, list)
+        (false, tokens)
     end
 
 
-  and e1(list) = (print("e1: \n"); N(list));
+  (* e2(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens if tokens are a valid construct of "N", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and e2(tokens) = N(tokens)   (* N *)
+
+
+  (* TODO: move this into N *)
+  (* n0(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens if tokens are a valid construct of "T", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and n0(tokens) = T(tokens)        (* T *)
+
+
+  (* n1(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens if tokens are a valid construct of "-T", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and n1(Negate::rest) = T(rest)   (* -T *)
+    | n1(tokens)       = (false, tokens)
+
+
+  (* t0(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and tail of tokens if head of tokens is a Number,
+           true and tail of tokens if head of tokens is a Variable
+           otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and t0 (Number(_)::rest)   = (true, rest)     (* number *)
+    | t0 (Variable(_)::rest) = (true, rest)     (* variable *)
+    | t0 (tokens)            = (false, tokens)
+
+
+  (* t1(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and tail of tokens if head of tokens is a Function, otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and t1(Function(_)::rest) = N(rest)           (* "Function N" *)
+    | t1(tokens)            = (false, tokens)
+
+
+    (* TODO: try to clean this up! *)
+  (* t2(tokens)
+     TYPE: token list -> (bool * token list)
+     PRE: true
+     POST: true and remaining tokens, if tokens match the construct "(E)", otherwise false and tokens
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  and t2(Open::rest) = (* match "(" *)
+    let
+
+      (* close(tokens)
+         TYPE: token list -> (bool * token list)
+         PRE: true
+         POST: true and tail of tokens if head of tokens is a Closed token, otherwise false and tokens
+         VARIANT: TODO
+         EXAMPLE: TODO
+      *)
+      fun close(Closed::rest) = (true, rest)
+        | close(tokens)       = (false, tokens)
+
+      val (test, l) = E(rest)       (* match "E" *)
+    in
+      if test then
+        close(l)    (* match ")" *)
+      else
+        (false, Open::rest)
+    end
+    | t2(tokens) = (false, tokens);
+
 
 in
-
-  fun validate(tokens) =
-    let
-      val (test, l) = E(tokens)
-    in
-      test andalso l = []
-    end
+  (* validate(tokens)
+     TYPE: token list -> bool
+     PRE: true
+     POST: true if tokens are a valid construct of "E" and no tokens remaining (see above or documentation ), false otherwise
+     VARIANT: TODO
+     EXAMPLE: TODO
+  *)
+  fun validate(tokens) = E(tokens) = (true, [])
 
 end;
 
 
-fun valid(exp) = (print("===========================================================\n"); print(exp); validate(tokenize(exp)));
+
+
+(* testing part *)
+fun valid(exp) = ((*print("===========================================================\n");*) print(exp^"\n"); validate(tokenize(exp)));
 
 
 fun test() = (valid("1") = true andalso
@@ -171,6 +268,11 @@ fun test() = (valid("1") = true andalso
               valid("sin x") = true andalso
               valid("sin (x*2)") = true andalso
               valid("sin cos x") = true andalso
+              valid("1 * (2 + 3)") = true andalso
+              valid("x = 10") = true andalso
+              valid("x = 10 * 2") = true andalso
+              valid("x = y") = true andalso
+              valid("x = y = 42") = true andalso
 
               valid("++1") = false andalso
               valid("1++") = false andalso
