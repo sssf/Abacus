@@ -268,9 +268,9 @@ fun test() = (valid("1") = true andalso
               valid("x = 10") = true andalso
               valid("x = 10 * 2") = true andalso
               valid("x = y") = true andalso
+              valid("x = y = 42") = true andalso
 
 
-              valid("x = y = 42") = false andalso
               valid("++1") = false andalso
               valid("1++") = false andalso
               valid("1*+1") = false andalso
