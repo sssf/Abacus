@@ -1,46 +1,46 @@
-(* toPostfix(l)
+(* translate(l)
    TYPE: token list -> token list
    PRE:  l is a valid expression
    POST: elements of l rearranged from infix to postfix notation.
    VARIANT: length of l
-   EXAMPLE: toPostfix([Number("1"),Operator("+"),Number("2")]) = [Number("1"),Number("2"),Operator("+")]
+   EXAMPLE: translate([Number("1"),Operator("+"),Number("2")]) = [Number("1"),Number("2"),Operator("+")]
 *)
-(*toPostfix(Variable(name)::Assignment::tokens) = toPostfix(tokens) @ [Assignment, Variable(name)]*)
-fun toPostfix(l) =
+(*translate(Variable(name)::Assignment::tokens) = translate(tokens) @ [Assignment, Variable(name)]*)
+fun translate(l) =
   let
-    fun toPostfix'([], EmptyStack, q) = q (*Base case*)
-      | toPostfix'([], s, q) = toPostfix'([], pop(s), top(s)::q) (*Input list is empty, but there are still items in the operator stack*)
-      | toPostfix'(Variable(name)::Assignment::xs, s, q) = (Variable(name)::Assignment::(toPostfix'(xs, s, q))) (* super haxXxor *)
-      | toPostfix'(Number(n)::xs, s, q) = toPostfix'(xs,s, Number(n)::q) (*Input is a Number, moves it to the output queue*)
-      | toPostfix'(Variable(n)::xs, s, q) = toPostfix'(xs,s, Variable(n)::q) (*Input is a Number, moves it to the output queue*)
-      | toPostfix'(Open::xs, s, q) = toPostfix'(xs, push(s,Open),q) (*Input is a left parantheses, adds it to the operator stack*)
+    fun translate'([], EmptyStack, q) = q (*Base case*)
+      | translate'([], s, q) = translate'([], pop(s), top(s)::q) (*Input list is empty, but there are still items in the operator stack*)
+      | translate'(Variable(name)::Assignment::xs, s, q) = (Variable(name)::Assignment::(translate'(xs, s, q))) (* super haxXxor *)
+      | translate'(Number(n)::xs, s, q) = translate'(xs,s, Number(n)::q) (*Input is a Number, moves it to the output queue*)
+      | translate'(Variable(n)::xs, s, q) = translate'(xs,s, Variable(n)::q) (*Input is a Number, moves it to the output queue*)
+      | translate'(Open::xs, s, q) = translate'(xs, push(s,Open),q) (*Input is a left parantheses, adds it to the operator stack*)
 
-      | toPostfix'(Negate::xs, s, q) = toPostfix'(Function("negate")::xs, s, q) (*Input is a left parantheses, adds it to the operator stack*)
+      | translate'(Negate::xs, s, q) = translate'(Function("negate")::xs, s, q) (*Input is a left parantheses, adds it to the operator stack*)
 
       (*Input is right parantheses, move operators from stack to queue untill the matching left parantheses is found*)
-      | toPostfix'(Closed::xs, s, q) = if (top(s) = Open) then toPostfix'(xs,pop(s),q) else toPostfix'(Closed::xs, pop(s), top(s)::q)
-      | toPostfix'( head::xs, EmptyStack, q) = toPostfix'(xs, push(EmptyStack, head), q)(*Operator/function added to otherwhise empty stack*)
-      | toPostfix'( Operator(name)::xs, s, q) = (*If operator on stack have higher priority than input, move from stack to queue, else add input to stack*)
+      | translate'(Closed::xs, s, q) = if (top(s) = Open) then translate'(xs,pop(s),q) else translate'(Closed::xs, pop(s), top(s)::q)
+      | translate'( head::xs, EmptyStack, q) = translate'(xs, push(EmptyStack, head), q)(*Operator/function added to otherwhise empty stack*)
+      | translate'( Operator(name)::xs, s, q) = (*If operator on stack have higher priority than input, move from stack to queue, else add input to stack*)
         let
           val (prio) = getPriority(Operator(name))
           val (prio') = if top(s) <> Open then getPriority(top(s)) else 0
         in
           if prio' >= prio then
-          toPostfix'( Operator(name)::xs, pop(s), top(s)::q)
+          translate'( Operator(name)::xs, pop(s), top(s)::q)
           else
-          toPostfix'(xs, push(s, Operator(name)), q)
+          translate'(xs, push(s, Operator(name)), q)
         end
         (*fixa snyggare lösning sen*)
-        | toPostfix'( Function(name)::xs, s, q) = (*If operator on stack have higher priority than input, move from stack to queue, else add input to stack*)
+        | translate'( Function(name)::xs, s, q) = (*If operator on stack have higher priority than input, move from stack to queue, else add input to stack*)
         let
           val (prio) = getPriority(Function(name))
           val (prio') = if top(s) <> Open then getPriority(top(s)) else 0
         in
           if prio' > prio then
-          toPostfix'( Function(name)::xs, pop(s), top(s)::q)
+          translate'( Function(name)::xs, pop(s), top(s)::q)
           else
-          toPostfix'(xs, push(s, Function(name)), q)
+          translate'(xs, push(s, Function(name)), q)
         end
   in
-    List.rev(toPostfix'(l,EmptyStack,[]))
+    List.rev(translate'(l,EmptyStack,[]))
   end;
