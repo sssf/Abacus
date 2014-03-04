@@ -11,7 +11,7 @@ val defaultEnviroment = Enviroment([("Pi", Math.pi),
 fun getValue(Enviroment(x::xs), name) = 
   let
     val found = (List.find (fn (str, _) => name = str) (x::xs))
-    val (_, value) = valOf(found) 
+    val (_, value) = valOf(found) handle Option => raise Fail "exit is not a variable stupid!"
   in
     value
   end;
