@@ -1,9 +1,11 @@
+(*
 use "enviroment.sml";
 use "datatypes.sml";
 use "stack.sml";
 use "functions.sml";
 use "lexical_analyzer.sml";
 use "input.sml";
+*)
 
 
 (* recursive-descent parser implmenenting the following language:
