@@ -5,15 +5,17 @@
    VARIANT: length of l
    EXAMPLE: toPostfix([Number("1"),Operator("+"),Number("2")]) = [Number("1"),Number("2"),Operator("+")]
 *)
+(*toPostfix(Variable(name)::Assignment::tokens) = toPostfix(tokens) @ [Assignment, Variable(name)]*)
 fun toPostfix(l) =
   let
-    fun	toPostfix'([], EmptyStack, q) = q (*Base case*)
+    fun toPostfix'([], EmptyStack, q) = q (*Base case*)
       | toPostfix'([], s, q) = toPostfix'([], pop(s), top(s)::q) (*Input list is empty, but there are still items in the operator stack*)
+      | toPostfix'(Variable(name)::Assignment::xs, s, q) = (Variable(name)::Assignment::(toPostfix'(xs, s, q))) (* super haxXxor *)
       | toPostfix'(Number(n)::xs, s, q) = toPostfix'(xs,s, Number(n)::q) (*Input is a Number, moves it to the output queue*)
       | toPostfix'(Variable(n)::xs, s, q) = toPostfix'(xs,s, Variable(n)::q) (*Input is a Number, moves it to the output queue*)
       | toPostfix'(Open::xs, s, q) = toPostfix'(xs, push(s,Open),q) (*Input is a left parantheses, adds it to the operator stack*)
 
-      | toPostfix'(Negate::xs, s, q) = toPostfix'(Function("negate")::xs, s, q) (*Input is a left parantheses, adds it to the operator stack*)      
+      | toPostfix'(Negate::xs, s, q) = toPostfix'(Function("negate")::xs, s, q) (*Input is a left parantheses, adds it to the operator stack*)
 
       (*Input is right parantheses, move operators from stack to queue untill the matching left parantheses is found*)
       | toPostfix'(Closed::xs, s, q) = if (top(s) = Open) then toPostfix'(xs,pop(s),q) else toPostfix'(Closed::xs, pop(s), top(s)::q)
