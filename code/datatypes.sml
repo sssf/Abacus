@@ -1,7 +1,8 @@
 (* REPRESENTATION CONVENTION: Number(id)    - represents a number token
                               Variable(id)  - represents a variable token
                               Functions(id) - represents a function token
-                              Operator(id)  - represents a operator tokenA
+                              Operator(id)  - represents a operator token
+                              Assignment    - represents the assignment token
                               Open          - represents a open parenthesis
                               Close         - represents a closed parenthesis
 
