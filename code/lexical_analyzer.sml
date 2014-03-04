@@ -66,7 +66,7 @@ local
       else if Char.isSpace(head) then (* ignore whitespace *)
         start(tail)
       else
-        case head of #"=" => Assigment::start(tail) (* "=" *)
+        case head of #"=" => Assignment::start(tail) (* "=" *)
                    | #")" =>    Closed::start(tail)
                    | #"(" =>      Open::start(tail)
                    | _    => raise Fail ("invalid input: "^Char.toString(head)^" was found")
