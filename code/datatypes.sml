@@ -11,13 +11,16 @@ datatype token = Number   of string
                | Variable of string
                | Function of string
                | Operator of string
-               | Assigment
+               | Assignment
                | Negate
                | Open
                | Closed
 
-
-
+(*
+fun getValue(Number(n))      = valOf(Real.fromString(n))
+  | getValue(Variable(name)) = getValue(name)
+  | getValue(_) = raise Fail "token does not have a value";
+  *)
 
 
 (* format(list)
@@ -26,7 +29,7 @@ datatype token = Number   of string
    POST: token list as string
    EXAMPLE: TODO
 *)
-fun format(enviroment) = Real.toString(getValue(enviroment,"ans"))^"\n";(*) 
+fun format(enviroment) = Real.toString(getValue(enviroment,"ans"))^"\n";(*)
   format([])                 = "\n"
   | format(Number(id)::tail)   = id^" "^format(tail)
   | format(Variable(id)::tail) = id^" "^format(tail)
