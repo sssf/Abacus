@@ -7,8 +7,8 @@ use "input.sml";
 
 
 (* recursive-descent parser implmenenting the following language:
-
-    E -> Variable = E | N Operator E | N
+    A -> Variable = E | E
+    E -> N Operator E | N
     N -> T | -T
     T -> Number | Variable | Function N | (E)
 
@@ -16,6 +16,9 @@ use "input.sml";
 *)
 local
 
+  fun A ([]) = (false, [])
+    | A (Variable(_)::Assignment::tokens) = A(tokens)
+    | A (tokens) = E(tokens)
 
   (* E(tokens)
      TYPE: token list -> (bool * token list)
@@ -24,28 +27,21 @@ local
      VARIANT: TODO
      EXAMPLE: TODO
   *)
-  fun E ([])     = (false, [])
+  and E ([])     = (false, [])
     | E (tokens) =
     let
-      val (test, l) = e0(tokens) (* "Variable = E" *)
+      val (test, l) = e0(tokens) (* "N Operator E" *)
     in
       if test  then
         (true, l)
       else
         let
-          val (test, l) = e1(tokens) (* "N operator E" *)
+          val (test, l) = e1(tokens) (* "N" *)
         in
           if test then
             (true, l)
           else
-            let
-              val (test, l) = e2(tokens) (* "N" *)
-            in
-              if test then
-                (true, l)
-              else
-                (false, tokens)
-            end
+            (false, tokens)
         end
     end
 
@@ -115,19 +111,19 @@ local
      POST: true and remaining tokens if tokens are a valid construct of "Variable = E", otherwise false and tokens
      VARIANT: TODO
      EXAMPLE: TODO
-  *)
-  and e0(Variable(_)::Assigment::rest) = E(rest)   (* Variable = E *)
+  *) (*
+  and e0(Variable(_)::Assignment::rest) = E(rest)   (* Variable = E *)
     | e0(tokens)                       = (false, tokens)
+    *)
 
-
-  (* e1(tokens)
+  (* e0(tokens)
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are a valid construct of "N Operator E", otherwise false and tokens
      VARIANT: TODO
      EXAMPLE: TODO
   *)
-  and e1(tokens) =  (* N operator E *)
+  and e0(tokens) =  (* N operator E *)
     let
       val (test, l) = N(tokens)
     in
@@ -152,14 +148,14 @@ local
     end
 
 
-  (* e2(tokens)
+  (* e1(tokens)
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are a valid construct of "N", otherwise false and tokens
      VARIANT: TODO
      EXAMPLE: TODO
   *)
-  and e2(tokens) = N(tokens)   (* N *)
+  and e1(tokens) = N(tokens)   (* N *)
 
 
   (* TODO: move this into N *)
@@ -244,11 +240,11 @@ in
   (* validate(tokens)
      TYPE: token list -> bool
      PRE: true
-     POST: true if tokens are a valid construct of "E" and no tokens remaining (see above or documentation ), false otherwise
+     POST: true if tokens are a valid construct of "A" and no tokens remaining (see above or documentation ), false otherwise
      VARIANT: TODO
      EXAMPLE: TODO
   *)
-  fun validate(tokens) = E(tokens) = (true, [])
+  fun validate(tokens) = A(tokens) = (true, [])
 
 end;
 
@@ -272,8 +268,9 @@ fun test() = (valid("1") = true andalso
               valid("x = 10") = true andalso
               valid("x = 10 * 2") = true andalso
               valid("x = y") = true andalso
-              valid("x = y = 42") = true andalso
 
+
+              valid("x = y = 42") = false andalso
               valid("++1") = false andalso
               valid("1++") = false andalso
               valid("1*+1") = false andalso
