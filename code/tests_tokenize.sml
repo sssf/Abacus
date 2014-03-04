@@ -1,4 +1,12 @@
 (*
+  Import needed file so this can be run on its own
+*)
+use "stack.sml";
+use "enviroment.sml";
+use "datatypes.sml";
+use "functions.sml";
+use "tokenize.sml";
+(*
   Template for writing test cases. Based on assignment3_tests.sml by Dave Clarke
 
 
