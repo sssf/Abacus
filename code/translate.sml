@@ -18,7 +18,7 @@ fun translate(l) =
       | translate'(Negate::xs, s, q) = translate'(Function("negate")::xs, s, q) (*Input is a left parantheses, adds it to the operator stack*)
 
       (*Input is right parantheses, move operators from stack to queue untill the matching left parantheses is found*)
-      | translate'(Closed::xs, s, q) = if (top(s) = Open) then translate'(xs,pop(s),q) else translate'(Closed::xs, pop(s), top(s)::q)
+      | translate'(Close::xs, s, q) = if (top(s) = Open) then translate'(xs,pop(s),q) else translate'(Close::xs, pop(s), top(s)::q)
       | translate'( head::xs, EmptyStack, q) = translate'(xs, push(EmptyStack, head), q)(*Operator/function added to otherwhise empty stack*)
       | translate'( Operator(name)::xs, s, q) = (*If operator on stack have higher priority than input, move from stack to queue, else add input to stack*)
         let
