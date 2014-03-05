@@ -27,12 +27,12 @@ abs       - |x|
 operators
 -------------------------------
 
-+         Addition
--         Subtraction
-*         Multiplication
-/         Division
-mod       Modulus
-div       Integer division
-()        Priority brackets
++         - Addition
+-         - Subtraction
+*         - Multiplication
+/         - Division
+mod       - Modulus
+div       - Integer division
+()        - Parentheses
 
 
