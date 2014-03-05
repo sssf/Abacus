@@ -12,6 +12,11 @@ exit      - exit Abacus
 :q        - exit Abacus
 :w        - exit Abacus
 
+variables
+-------------------------------
+Pi        - 3.141592654
+e         - 2.718281828
+
 function
 -------------------------------
 sin       - sinus x
@@ -22,12 +27,12 @@ abs       - |x|
 operators
 -------------------------------
 
-+         - 1 + 2
--
-*
-/
-mod
-div
-()
++         Addition
+-         Subtraction
+*         Multiplication
+/         Division
+mod       Modulus
+div       Integer division
+()        Priority brackets
 
 
