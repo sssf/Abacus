@@ -10,6 +10,7 @@ fun readLine () =
   valOf(TextIO.inputLine TextIO.stdIn);
 
 
+
 (*
   eat ()
   TYPE: unit -> unit
@@ -22,7 +23,7 @@ fun eat() =
     val next = TextIO.lookahead(TextIO.stdIn)
   in
     if next <> NONE andalso Char.isSpace(valOf(next)) then
-      (TextIO.input1(TextIO.stdIn); eat())
+      (TextIO.input1(TextIO.stdIn); print(" ~ "); eat())
     else ()
   end;
 
@@ -42,5 +43,15 @@ fun input(msg)=
   in
     String.substring(r, 0, size r - 1)
   end;
+
+  fun printFile(filename) =
+    let
+      val f = TextIO.openIn(filename)
+      fun printLines() =
+        case TextIO.inputLine(f) of SOME(line) => (print(line); printLines())
+                                  | NONE       => ()
+    in
+      printLines()
+    end;
 
 end;
