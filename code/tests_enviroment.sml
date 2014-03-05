@@ -43,15 +43,20 @@ fun test () =
        PRE:  1<=n<=4
        POST: true iff test n executes correctly
    *)
-    val testEnviroment = Enviroment([("Pi", Math.pi),
-                                    ("e",  Math.e)])
+    fun floatEqual(a,b) =
+        let
+          val diff = a - b
+        in
+          abs(diff) < 0.000001
+        end
   
 
-  fun test 0 = true
-    | test 1 = false
-    | test 2 = raise Fail "blaaa"
-    | test _ = raise Domain
-      val numberOfTests = 2
+    val testEnviroment = Enviroment([("Pi", Math.pi),
+                                    ("e",  Math.e), ("milo4306", 9000.1)])
+  
+
+  fun test 0 = floatEqual(getValue(testEnviroment, "milo4306"), 9000.1)
+      val numberOfTests = 1
     in
       List.app result (List.tabulate(numberOfTests, fn n => (n, test)))
     end;
