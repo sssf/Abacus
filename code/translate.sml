@@ -41,6 +41,7 @@ fun translate(l) =
           else
           translate'(xs, push(s, Function(name)), q)
         end
+        | translate'(_, _, _) = raise Fail "Invalid input, can't translate"
   in
     List.rev(translate'(l,EmptyStack,[]))
   end;
