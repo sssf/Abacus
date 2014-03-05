@@ -12,30 +12,57 @@ use "validate.sml";
 local
 
 
-  fun logo() = (print( "                                                                               \n");
-                print( "       db         88                                                           \n");
-                print( "      d88b        88                                                           \n");
-                print( "     d8'`8b       88                                                           \n");
-                print( "    d8'  `8b      88,dPPYba,   ,adPPYYba,   ,adPPYba,  88       88  ,adPPYba,  \n");
-                print( "   d8YaaaaY8b     88P'    \"8a  \"\"     `Y8  a8\"     \"\"  88       88  I8[    \"\"  \n");
-                print( "  d8\"\"\"\"\"\"\"\"8b    88       d8  ,adPPPPP88  8b          88       88   `\"Y8ba,   \n");
-                print( " d8'        `8b   88b,   ,a8\"  88,    ,88  \"8a,   ,aa  \"8a,   ,a88  aa    ]8I  \n");
-                print( "d8'          `8b  8Y\"Ybbd8\"'   `\"8bbdP\"Y8   `\"Ybbd8\"'   `\"YbbdP'Y8  `\"YbbdP\"'  \n");
-                print( "                                                                               \n");
-                print( "                                                                               \n"));
+  (* logo()
+     TYPE: unit -> unit
+     PRE:  file data/logo.txt must exist
+     POST: unit
+     SIDE-EFFECTS: prints content of data/logo.txt to stdOut
+  *)
+  fun logo()    = printFile("data/logo.txt");
+
+  (* welcome()
+     TYPE: unit -> unit
+     PRE:  file data/welcome.txt must exist
+     POST: unit
+     SIDE-EFFECTS: prints content of data/welcome.txt to stdOut
+  *)
+  fun welcome() = printFile("data/welcome.txt");
+
+  (* help()
+     TYPE: unit -> unit
+     PRE:  file data/help.txt must exist
+     POST: unit
+     SIDE-EFFECTS: prints content of data/help.txt to stdOut
+  *)
+  fun help   () = printFile("data/help.txt");
+
+  (* credits()
+     TYPE: unit -> unit
+     PRE:  file data/credits.txt must exist
+     POST: unit
+     SIDE-EFFECTS: prints content of data/credits.txt to stdOut
+  *)
+  fun credits() = printFile("data/credits.txt");
 
 
-  fun welcome() = print("Welcome to Abacus! \nType \"help\", \"credits\" for more information. \n");
-  fun help   () = printFile("help.txt") 
-  fun credits() = print("\n   Developed by Micael Loberg, Tommy Vagbratt and Wenting Jin \n\n");
+  (* exception Quit
+     USE: raise Quit in order to exit main loop
+  *)
+  exception Quit;
 
 
-exception Quit;
-
+  (* handleInput()
+     TYPE: unit -> string
+     PRE:  true
+     POST: first non-command, non-black line read from stdIn
+     SIDE-EFFECTS: raises Quit if quit command is read from stdIn, prints to stdOut
+     VARIANT: number of commands in stdIn
+  *)
   fun handleInput() =
     let
-      val exp = input(" ~ ")
+      val exp = input(" ~ ") (* read input from stdIn *)
     in
+      (* handle commands or return input *)
       case exp of "help"    => (help();    handleInput()) |
                   "credits" => (credits(); handleInput()) |
                   "logo"    => (logo();    handleInput()) |
@@ -46,6 +73,14 @@ exception Quit;
                   ":Q"      => raise Quit                 | _ => exp
     end;
 
+
+  (* validExpression()
+     TYPE: unit -> token list
+     PRE:  true
+     POST: token list representing a valid expression
+     SIDE-EFFECTS: handles Fail exceptions from tokeize and validate, prints to stdOut if invalid expression is found
+     VARIANT: number of invalid expressions the user types
+  *)
   fun validExpression() =
     let
       val exp = handleInput()
@@ -58,22 +93,29 @@ exception Quit;
         (print(" => invalid expression\n"); validExpression())
     end;
 
+
 in
-  (*
-  fun printFile(filename) =
-    let
-      val f = TextIO.openIn(filename)
-      fun printFile() =
-        case TextIO.inputLine(f) of SOME(line) => (print(line); printFile())
-                                  | NONE       => ()
-    in
-      printFile()
-    end;
-    *)
+
+
+  (* abacus()
+     TYPE: unit -> unit
+     PRE:  true
+     POST: ()
+     SIDE-EFFECTS: prints to stdOut, reads from stdIn
+  *)
   fun abacus() =
     let
       val _ = TextIO.inputLine(TextIO.stdIn) (* eat "\n" of the input buffer *)
       val _ = (logo(); welcome())
+
+
+      (* run(env)
+         TYPE: Enviroment -> Enviroment
+         PRE:  true
+         POST: env with user typed expression evaluated on
+         SIDE-EFFECTS: prints to stdOut, reads from stdIn
+         VARIANT: number of nun-quit commands typed by user
+      *)
       fun run(env) =
         let
           val env = evaluate(env, EmptyStack, translate(validExpression()) ) handle Fail(message) => (print(" => "^message^"\n"); run(env))
@@ -83,6 +125,6 @@ in
         end
       val _ = run(defaultEnviroment) handle Fail(message) => (print(" => "^message^"\n"); run(defaultEnviroment)) | Quit => defaultEnviroment
     in
-     ()(* run(defaultEnviroment) handle Fail(message) => (print(" => "^message^"\n"); run(defaultEnviroment)) | Quit => defaultEnviroment*)
+     ()
     end;
 end;
