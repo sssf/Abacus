@@ -15,7 +15,7 @@ datatype token = Number   of string
                | Assignment
                | Negate
                | Open
-               | Closed
+               | Close
 
 (*
 fun getValue(Number(n))      = valOf(Real.fromString(n))
@@ -30,7 +30,8 @@ fun getValue(Number(n))      = valOf(Real.fromString(n))
    POST: token list as string
    EXAMPLE: TODO
 *)
-fun format(enviroment) = Real.toString(getValue(enviroment,"ans"))^"\n";(*)
+fun format(enviroment)
+ = Real.toString(getValue(enviroment,"ans"))^"\n";(*)
   format([])                 = "\n"
   | format(Number(id)::tail)   = id^" "^format(tail)
   | format(Variable(id)::tail) = id^" "^format(tail)
