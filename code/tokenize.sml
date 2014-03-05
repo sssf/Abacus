@@ -55,21 +55,21 @@ local
   *)
   fun start([]) = []
     | start(head::tail) =
-      if head = #"0" then
+      if head = #"0" then (* numbers beginning with 0 *)
         n2(tail, [head])
-      else if Char.isDigit(head) then
+      else if Char.isDigit(head) then (* numbers beginning with 1-9 *) 
         n1(tail, [head])
-      else if Char.isAlpha(head) then
+      else if Char.isAlpha(head) then  (* identifiers, functions, and non-symbolic operators *)
         i1(tail,[head])
       else if isSymbolicOperator(head) then (* handle symbolic operator *)
         Operator(Char.toString(head))::start(tail)
-      else if Char.isSpace(head) then (* ignore whitespace *)
+      else if Char.isSpace(head) orelse head = #";" then (* ignore whitespace *)
         start(tail)
       else
         case head of #"=" => Assignment::start(tail) (* "=" *)
                    | #")" =>    Closed::start(tail)
                    | #"(" =>      Open::start(tail)
-                   | _    => raise Fail ("invalid input: "^Char.toString(head)^" was found")
+                   | _    => raise Fail ("found invalid character: \""^Char.toString(head)^"\"")
 
 
   (* numbers *)
@@ -109,12 +109,12 @@ local
      POST: TODO
      EXAMPLE: TODO
   *)
-  and n3([], acc) = raise Fail "0-9 expected but reached end of input"
+  and n3([], acc) = raise Fail "digit expected, but nothing was found"
     | n3(head::tail, acc) =
       if Char.isDigit(head) then
         n4(tail, head::acc)
       else
-        raise Fail("0-9 expected but "^(Char.toString(head))^" was found")
+        raise Fail("digit expected, but \""^(Char.toString(head))^"\" was found")
 
 
   (* n4(charList, acc)
