@@ -34,12 +34,11 @@
   \item [Input] \hfill \\ handles merely input text , checks if content other than whitespace is input and passes input onto Compiler
   \item [Compiler] \hfill
     \begin{itemize}
-      \item Tokenizer: split input text into expression of tokens tagged as Number, Variable, Function, Operator, Assignment, Negatation, Open or Close parenthesis
+      \item Tokenize: split input text into expression of tokens tagged as Number, Variable, Function, Operator, Assignment, Negatation, Open or Close parenthesis
       \item Validate: statement check on tokens, to ensure expression is valid, but careless of priority of the functions/operators 
-      \item Postfix: convert tokens into a reversed order list of number with priority handled
+      \item Translate: convert tokens from infix notation to  postfix notation
       \end{itemize}    
-  \item [Virtual Machine] \hfill \\
-    virtual machine (stack based, num pushed onto stack; processcor\footnote{functions are treated the same way as operators in a virtual machine,} encountered,takes item from stack;)
+  \item [Evaluation] \hfill \\ Compiled expression gets evaluated upon whether it is valid or not. A stack based "virtual Machine" evaluates expreesion as following rules, num pushed onto stack; processcor\footnote{functions are treated the same way as operators in a virtual machine,} encountered,takes item from stack;)
 \end{description}
 
 
@@ -65,7 +64,7 @@ Smarta lösningar (algoritmer)
 - Intressanta detaljer
 - Fungerar programmet? Hur vet du det?
 - Finns det saker som inte fungerar, fall som inte hanteras?
-- Ã„r programmet effektivt?
+- Ãr programmet effektivt?
 \fi
 
 \subsection{General Analysis}
