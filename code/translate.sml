@@ -10,7 +10,10 @@ fun translate(l) =
   let
     fun translate'([], EmptyStack, q) = q (*Base case*)
       | translate'([], s, q) = translate'([], pop(s), top(s)::q) (*Input list is empty, but there are still items in the operator stack*)
-      | translate'(Variable(name)::Assignment::xs, s, q) = (Variable(name)::Assignment::(translate'(xs, s, q))) (* super haxXxor *)
+      
+        (*Matches for a variable followed by the Assignment operator -> concats the variable and assignment to the recursive call*)
+      | translate'(Variable(name)::Assignment::xs, s, q) = (Variable(name)::Assignment::(translate'(xs, s, q)))
+
       | translate'(Number(n)::xs, s, q) = translate'(xs,s, Number(n)::q) (*Input is a Number, moves it to the output queue*)
       | translate'(Variable(n)::xs, s, q) = translate'(xs,s, Variable(n)::q) (*Input is a Number, moves it to the output queue*)
       | translate'(Open::xs, s, q) = translate'(xs, push(s,Open),q) (*Input is a left parantheses, adds it to the operator stack*)
@@ -30,7 +33,6 @@ fun translate(l) =
           else
           translate'(xs, push(s, Operator(name)), q)
         end
-        (*fixa snyggare lösning sen*)
         | translate'( Function(name)::xs, s, q) = (*If operator on stack have higher priority than input, move from stack to queue, else add input to stack*)
         let
           val (prio) = getPriority(Function(name))
@@ -41,7 +43,7 @@ fun translate(l) =
           else
           translate'(xs, push(s, Function(name)), q)
         end
-        | translate'(_, _, _) = raise Fail "Invalid input, can't translate"
+        | translate'(_, _, _) = raise Fail "Invalid input, can't translate" (*Probably cant happen*)
   in
-    List.rev(translate'(l,EmptyStack,[]))
+    List.rev(translate'(l,EmptyStack,[]))(*Once done, reverse the list so that evaluate can handle it*)
   end;
