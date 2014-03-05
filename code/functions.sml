@@ -1,12 +1,14 @@
 (* functionList
    TYPE: (string * int) list
    VALUE: list of functions and their priorities
-   TODO: add function
+   TODO: add function tan
 *)
 val functionList = [("sin",   9, (fn stack => push(pop(stack),Math.sin(top(stack))))),
                     ("arcsin",9, (fn stack => push(pop(stack),Math.asin(top(stack))))),
                     ("cos",   9, (fn stack => push(pop(stack),Math.cos(top(stack))))),
                     ("arcos", 9, (fn stack => push(pop(stack),Math.sin(top(stack))))),
+                    ("tan",   9, (fn stack => push(pop(stack),Math.tan(top(stack))))),
+                    ("arctan",9, (fn stack => push(pop(stack),Math.atan(top(stack))))),
                     ("sqrt",  9, (fn stack => push(pop(stack),Math.sqrt(top(stack))))),
                     ("log",   9, (fn stack => push(pop(stack),Math.log10(top(stack))))),
                     ("ln",    9, (fn stack => push(pop(stack),Math.ln(top(stack))))),
@@ -45,7 +47,7 @@ fun operatorFunction func stack = push(pop(pop(stack)), func(top(stack),top(pop(
    VALUE: list of Operators and their priorities
    TODO: add functions
 *)
-val operatorList = [("+",4,   operatorFunction (fn (x,y) => x + y)),
+val operatorList = [("+",4,   operatorFunction (fn (x,y) => x +  y)),
                     ("-",4,   operatorFunction (fn (x,y) => y - x)),
                     ("/",5,   operatorFunction (fn (x,y) => y / x)),
                     ("*",5,   operatorFunction (fn (x,y) => x * y)),

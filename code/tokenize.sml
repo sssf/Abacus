@@ -67,7 +67,7 @@ local
         start(tail)
       else
         case head of #"=" => Assignment::start(tail) (* "=" *)
-                   | #")" =>    Closed::start(tail)
+                   | #")" =>    Close::start(tail)
                    | #"(" =>      Open::start(tail)
                    | _    => raise Fail ("found invalid character: \""^Char.toString(head)^"\"")
 
@@ -170,7 +170,7 @@ in
      TYPE: string -> token list
      PRE:  true
      POST: list of tokens in str
-     EXAMPLE: tokenize("2 * sin(x)") = [Number("2"), Operator("*"), Function("sin"), Open, Variable("x"), Closed]
+     EXAMPLE: tokenize("2 * sin(x)") = [Number("2"), Operator("*"), Function("sin"), Open, Variable("x"), Close]
   *)
   fun tokenize(str) = fixNegation(start(explode(str)))
 

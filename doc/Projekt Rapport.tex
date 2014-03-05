@@ -1,4 +1,3 @@
-
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -8,7 +7,7 @@
 
 \title {Abacus \\ Interpreter for mathematical expressions in SML}
 \author{
-  VÂgbratt, Tommy
+  V√•gbratt, Tommy
   \and
   Loberg, Micael
 	\and
@@ -24,57 +23,106 @@
 
 
 \section{Introduction}
-\textnormal{A tool that takes mathematical expressions in text form may sound nothing special, but one may have encountered difficulties to find the right symbol to express trigonometric related functions such as "sin","pi" etc, on a typing-in calculator. However, this tool performs just as well as "normal" calculators, but can evaluate a whole mathematical expression that is just based on text! No more time wasting looking up symbols. Interesting? Well, it's just a "calculator".}
+\textnormal{A tool that takes mathematical expressions in text form may sound nothing special, but one may have encountered difficulties to find the right symbol on a typing-in calculator to express trigonometric related functions such as "sin", "arctan" etc. However, this program (Abacus) performs as an interpreter and functions just as a "normal" calculator, but can evaluate a whole mathematical expression that is just based on text! No more time wasting looking up symbols, with ability to declare variables, to do more advanced calculation. Interesting? Well, it's just a "calculator".}
 
 \section{"Calculator" in SML}
 \subsection{Design and Structure}
-\textnormal{Input, Compiler and Virtual Machine are three major parts of the system. All these parts are strictly serial between  each other. All steps inside a part are to build preparation work for next part, and all three parts form a sucessive execution. Executions can be achieved once or recursively per user's need. \newline Stack structure as abstract datatype is used. }
+\textnormal{There are three major parts of the system: Input, Compiler and Evaluation which are combined into a REPL\footnote{Read-Evaluate-Print Loop, more about REPL, please refer to http://en.wikipedia.org/wiki/REPL}. All these parts are strictly sequential between each other. All steps inside a part are to build preparation work for next part, and all three parts form a successive execution. Executions can be achieved as many times as user need.}
 \subsubsection{Structure Overview}
 \begin{description}
   \item [Input] \hfill \\ handles merely input text , checks if content other than whitespace is input and passes input onto Compiler
   \item [Compiler] \hfill
     \begin{itemize}
-      \item Tokenizer: split input text into expression of tokens tagged as Number, Variable, Function, Operator, Assignment, Negatation, Open or Close parenthesis
-      \item Validate: statement check on tokens, to ensure expression is valid, but careless of priority of the functions/operators 
-      \item Postfix: convert tokens into a reversed order list of number with priority handled
+      \item Tokenize: takes an expression represented as a string and split it into the tokens
+      \item Validate: performs grammatical validation on tokens, but careless of priority of the functions/operators 
+      \item Translate: convert tokens from infix notation to postfix notation with priority considered
       \end{itemize}    
-  \item [Virtual Machine] \hfill \\
-    virtual machine (stack based, num pushed onto stack; processcor\footnote{functions are treated the same way as operators in a virtual machine,} encountered,takes item from stack;)
+  \item [Evaluation] \hfill \\ Compiled expression gets evaluated. A stack based "virtual Machine" evaluates expression as following rules:
+\begin {itemize}
+\item Numbers pushed onto the stack
+\item Variables are looked up and get pushed onto the stack
+\item Functions and operators takes item(s) off from the stack and push evaluated result back onto the stack
+\end {itemize}
 \end{description}
 
 
 \iffalse
 En mer detaljerad beskrivning (design)
-- Vilka delar bestÂr systemet av? Hur samverkar de fˆr att lˆsa problemet?
+- Vilka delar best√•r systemet av? Hur samverkar de f√∂r att l√∂sa problemet?
 
-- Vilka datastrukturer anv‰nds? Beskriv abstrakta datatyper (gr‰nssnitt/interface)
+- Vilka datastrukturer anv√§nds? Beskriv abstrakta datatyper (gr√§nssnitt/interface)
 \fi
 
 \subsection{Algorithms and Alternatives}
-\textnormal{}
+\textnormal{ Data-types used in this program: Stack, Token, Environment.}
+\begin{description}
+\item [Stack] is a data-structure that only has two operations, pushing (adding) data to the top and the stack, and popping (removing and reading) data from the top of the stack.
+
+\item[Token] is the data-structure used in the program to represent numbers, functions, variables, parentheses, operators and assignment (which is treated as a special operator).
+
+\item[Enviroment] is a list of variables and their values.
+\end{description}
+\subsubsection{Tokenize}
+\textnormal{Expressions consist of number, assignment, identifiers of variable, operator and function, open and close parenthesis and whitespace. Tokenize takes expression represented as a string and splits them into token characterized as Number, Variable, Assignment, Function, Operator, Open and Close parenthesis}
+\begin {enumerate}
+\item \emph{Start}: take in digit 0-9.
+\item if 0 encountered, either is a 0, or followed by a dot(.) with 0-9 combinations
+\item if 1-9 encountered, either 1):followed by 0-9 combinations or 2): 0-9 combinations followed by a dot(.) with 0-9 combinations or dot
+\end{enumerate}
+
+\subsubsection{Validate}
+\begin {enumerate}
+\item ads
+\item sdf
+\end{enumerate}
+
+\subsubsection{Translate}
+\textnormal{The method for converting an expression in infix notation to postfix notation makes use of two lists holding, the first one holding the input and the second one holding the output, and a stack that holds the operators, functions and parentheses \newline \newline The algorithm works like this:}
+
+\begin {enumerate}
+\item read the first element of the input list, if it is empty we are done
+\item if first item on the input list is a number or a variable, add it to the output list
+\item input is a left parenthesis, add it to the operator stack
+\item if input is a function or an operator, check the priority of the top element of the operator stack.
+\begin{itemize}
+\item if the item of the stack has higher priority, push it to the output list, and go back to the previous step.
+\item if priority of the input is higher, put it on the output list
+\end{itemize}
+\item if the first element on the input list is a right parenthesis, pop elements on the stack to the output list until a left parenthesis is found, then discard both the left and right parenthesis.
+
+\end{enumerate}
+
+\subsubsection{Alternative algorithms}
+\textnormal{There are optional methods to get implementation of Tokenize, that for instance replace the state check by multiple case options, or check backwards of the string (which can be more complicated to implement), but such different ways can all lead to the same result, the way implemented in this program is actually not of much difference in the result but might be clearly structured when different state is called. \newline \newline There are different methods to implement Validate and Translate. Instead of first validating the expression and then translating it to postfix, an abstract syntax tree could have been built in the Validate. So there is no need to convert infix notation to postfix notation since it easily can be evaluated by traversing the tree. \newline \newline The actual method implemented in this step (shunting-yard algorithm) is the grounding method of this program, all built up functions and development is based on this idea once this method is introduced during the PKD course\footnote{find it.uu.se}. While shunting-yard algorithm handles priority problem, thus it become easier for the step of Validate, that Validate does not need to handle priority issues.}
+
+
 \iffalse
-Smarta lˆsningar (algoritmer)
+Smarta l√∂sningar (algoritmer)
 - Beskriv viktiga funktioner Designval
-- Finns alternativa s‰tt att lˆsa problemet? Varfˆr valde du det h‰r s‰ttet?
+- Finns alternativa s√§tt att l√∂sa problemet? Varf√∂r valde du det h√§r s√§ttet?
 - Konsekvenser av dina val
+
 \fi
 
 \subsection{Implementation}
-\textnormal{}
+\textnormal{Logotype is presented and there is a user manual built into the program, by typing ‚Äúhelp‚Äù, user can get user guide on how to use the program. \newline \newline Test cases are included for every source code file. \newline \newline It is easy to add more support for functions and operators because priority is not part of the validation but is handled in the translation part.}
+
+
 \iffalse
+
 - Intressanta detaljer
 - Fungerar programmet? Hur vet du det?
 - Finns det saker som inte fungerar, fall som inte hanteras?
-- √Ñr programmet effektivt?
+- √Ér programmet effektivt?
 \fi
 
 \subsection{General Analysis}
-\textnormal{}
+\textnormal{In order to keep the main loop running when exceptions are raised a new instance of the main function are run on top of it.}
 \iffalse
 Analys/diskussion
-- Vilka √r systemets styrkor/svagheter? -> Sustainability
-- Blev det bra? Skulle du ha gjort nÂgot annorlunda om du skulle bˆrja om? -> Sustainability
-- T‰nkbara vidareutvecklingar -> Furture Development
+- Vilka √Ér systemets styrkor/svagheter? -> Sustainability
+- Blev det bra? Skulle du ha gjort n√•got annorlunda om du skulle b√∂rja om? -> Sustainability
+- T√§nkbara vidareutvecklingar -> Furture Development
 \fi
 
 \subsubsection{Sustainability}
@@ -92,7 +140,7 @@ Analys/diskussion
 \section{Simple Guide for Simple Calculator}
 \textnormal{}
 \iffalse
-- Anv‰ndarhandledning med exempel (use cases)
+- Anv√§ndarhandledning med exempel (use cases)
 \fi
 
 
@@ -109,3 +157,5 @@ Analys/diskussion
 
 
 \end{document}
+
+
