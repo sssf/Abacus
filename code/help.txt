@@ -1,0 +1,33 @@
+
+For more detailed information see the documentation.
+
+commands
+-------------------------------
+help      - open help
+credits   - show credits
+logo      - show Abacus logo
+
+quit      - exit Abacus
+exit      - exit Abacus
+:q        - exit Abacus
+:w        - exit Abacus
+
+function
+-------------------------------
+sin       - sinus x
+cos       - cosinus x
+tan       - tangens x
+abs       - |x|
+
+operators
+-------------------------------
+
++         - 1 + 2
+-
+*
+/
+mod
+div
+()
+
+
