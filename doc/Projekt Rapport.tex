@@ -30,19 +30,19 @@
 \textnormal{There are three major parts of the system: Input, Compiler and Evaluation which are combined into a REPL\footnote{Read-Evaluate-Print Loop, more about REPL, please refer to http://en.wikipedia.org/wiki/REPL}. All these parts are strictly sequential between each other. All steps inside a part are to build preparation work for next part, and all three parts form a successive execution. Executions can be achieved as many times as user need.}
 \subsubsection{Structure Overview}
 \begin{description}
-  \item [Input] \hfill \\ handles merely input text , checks if content other than whitespace is input and passes input onto Compiler
+  \item [Input] \hfill \\Handles input text, takes the input and passes it to the compiler.
   \item [Compiler] \hfill
-    \begin{itemize}
-      \item Tokenize: takes an expression represented as a string and split it into the tokens
-      \item Validate: performs grammatical validation on tokens, but careless of priority of the functions/operators 
-      \item Translate: convert tokens from infix notation to postfix notation with priority considered
-      \end{itemize}    
-  \item [Evaluation] \hfill \\ Compiled expression gets evaluated. A stack based "virtual Machine" evaluates expression as following rules:
-\begin {itemize}
-\item Numbers pushed onto the stack
-\item Variables are looked up and get pushed onto the stack
-\item Functions and operators takes item(s) off from the stack and push evaluated result back onto the stack
-\end {itemize}
+  \begin{itemize}
+    \item Tokenize: Takes an expression represented as a string and split it into Tokens.
+    \item Validate: Performs grammatical validation on tokens, but careless of priority of the functions/operators \change
+    \item Translate: Convert an expression represented by Tokens from infix notation to postfix notation with priority considered \change
+  \end{itemize}    
+  \item [Evaluation] \hfill \\ Compiled expression gets evaluated. A stack based "virtual Machine" evaluates the expression using the following rules:
+  \begin {itemize}
+    \item Numbers are pushed onto the stack.
+    \item Variables are looked up and get pushed onto the stack.
+    \item Functions and operators takes item(s) off from the stack and push the evaluated result back onto the stack
+  \end {itemize}
 \end{description}
 
 
@@ -56,46 +56,54 @@ En mer detaljerad beskrivning (design)
 \subsection{Algorithms and Alternatives}
 \textnormal{ Data-types used in this program: Stack, Token, Environment.}
 \begin{description}
-\item [Stack] is a data-structure that only has two operations, pushing (adding) data to the top and the stack, and popping (removing and reading) data from the top of the stack.
+  \item [Stack] is a data-structure that only has three operations, pushing (adding) data to the top and the stack, and popping (removing) 
+  data from the top of the stack, and reading the top element of the stack without modifying the stack.
 
-\item[Token] is the data-structure used in the program to represent numbers, functions, variables, parentheses, operators and assignment (which is treated as a special operator).
+  \item[Token] is the data-structure used in the program to represent numbers, functions, variables, parentheses and operators.
 
-\item[Enviroment] is a list of variables and their values.
+  \item[Enviroment] is a list of variables and their values.
 \end{description}
 \subsubsection{Tokenize}
-\textnormal{Expressions consist of number, assignment, identifiers of variable, operator and function, open and close parenthesis and whitespace. Tokenize takes expression represented as a string and splits them into token characterized as Number, Variable, Assignment, Function, Operator, Open and Close parenthesis}
+\textnormal{An expressions can consist of numbers, identifiers of variables, operators and functions, open and close parenthesis and whitespace. Tokenize takes expression represented as a string and splits them into Tokens characterized as Number, Variable, Assignment, Function, Operator, Open and Close parenthesis}
 \begin {enumerate}
-\item \emph{Start}: take in digit 0-9.
-\item if 0 encountered, either is a 0, or followed by a dot(.) with 0-9 combinations
-\item if 1-9 encountered, either 1):followed by 0-9 combinations or 2): 0-9 combinations followed by a dot(.) with 0-9 combinations or dot
+  \item \emph{Start}: take in digit 0-9.
+  \item if 0 encountered, either is a 0, or followed by a dot(.) with 0-9 combinations
+  \item if 1-9 encountered, either 1):followed by 0-9 combinations or 2): 0-9 combinations followed by a dot(.) with 0-9 combinations or dot
 \end{enumerate}
 
 \subsubsection{Validate}
 \begin {enumerate}
-\item ads
-\item sdf
+  \item ads
+  \item sdf
 \end{enumerate}
 
 \subsubsection{Translate}
-\textnormal{The method for converting an expression in infix notation to postfix notation makes use of two lists holding, the first one holding the input and the second one holding the output, and a stack that holds the operators, functions and parentheses \newline \newline The algorithm works like this:}
+\textnormal{The method for converting an expression in infix notation to postfix notation makes use of two lists, the first one holding the input and the second one holding the output, and a stack that holds the operators, functions and parentheses. 
+This algorithm is called the \emph{Shunting-yard algorithm} and was invented by \emph{Edsger Wybe Dijkstra}.
 
-\begin {enumerate}
-\item read the first element of the input list, if it is empty we are done
-\item if first item on the input list is a number or a variable, add it to the output list
-\item input is a left parenthesis, add it to the operator stack
-\item if input is a function or an operator, check the priority of the top element of the operator stack.
-\begin{itemize}
-\item if the item of the stack has higher priority, push it to the output list, and go back to the previous step.
-\item if priority of the input is higher, put it on the output list
-\end{itemize}
-\item if the first element on the input list is a right parenthesis, pop elements on the stack to the output list until a left parenthesis is found, then discard both the left and right parenthesis.
 
-\end{enumerate}
+}
+\subsubsection{Evaluate}
+\textnormal{Evaluate is implemented with an algorithm that makes use of an Enviroment, a stack and a list containing the input.
+It takes a list of Tokens as input, a stack and an enviroment that holds all the variables.
+After the evaluation is done the result will be added to a Variable called "ans" that is inserted into the Enviroment
+}
+
 
 \subsubsection{Alternative algorithms}
-\textnormal{There are optional methods to get implementation of Tokenize, that for instance replace the state check by multiple case options, or check backwards of the string (which can be more complicated to implement), but such different ways can all lead to the same result, the way implemented in this program is actually not of much difference in the result but might be clearly structured when different state is called. \newline \newline There are different methods to implement Validate and Translate. Instead of first validating the expression and then translating it to postfix, an abstract syntax tree could have been built in the Validate. So there is no need to convert infix notation to postfix notation since it easily can be evaluated by traversing the tree. \newline \newline The actual method implemented in this step (shunting-yard algorithm) is the grounding method of this program, all built up functions and development is based on this idea once this method is introduced during the PKD course\footnote{find it.uu.se}. While shunting-yard algorithm handles priority problem, thus it become easier for the step of Validate, that Validate does not need to handle priority issues.}
+\textnormal{There are other ways of evaluating mathematical expressions. Instead of first converting the expression from infix notation to postfix 
+notation using the \emph{shunting-yard algorithm}\noteToSelf{dijkstra} and then evaluating it, an abstract syntax tree could be built while reading the input.
+That could be achieved with an algorithm similar to the one used
+in this program to validate the expression. That is, using an \emph{top down recursive descent algoithm}\noteToSelf{Tommys bok}
+If an abstract syntax tree was used the expression could then be evaluated by simple traversing the tree and evaluate the operators
+and functions as they are encountered.
 
+The main reason for chosing to first convert it from postfix to infix notation before evaluating the expression is that it would be easier for
+us to implement it compaired to building an abstract syntax tree.
+Another reason for our choice of algorithms is that the method of converting an expression from infix notation to postfix notation and then 
+evaluating it was briefly mentioned during one of the lectures which sparked an interest for this project.
 
+In the end both methods would give the same result, and for our purpuse our method is fast enought.}
 \iffalse
 Smarta lösningar (algoritmer)
 - Beskriv viktiga funktioner Designval
@@ -107,7 +115,61 @@ Smarta lösningar (algoritmer)
 \subsection{Implementation}
 \textnormal{Logotype is presented and there is a user manual built into the program, by typing “help”, user can get user guide on how to use the program. \newline \newline Test cases are included for every source code file. \newline \newline It is easy to add more support for functions and operators because priority is not part of the validation but is handled in the translation part.}
 
+\subsection{Tokenize}
+\subsection{Validate}
+\subsection{Translate}
+\textnormal{
+  The algorithm is implemented like this in pseudo-code:
+}
 
+\begin{itemize}
+  \item While input is not empty, read a Token
+\begin{itemize}
+    \item If Token is a number or a variable, add it to the output list
+    \item If Token is a left parenthesis, add it to the operator stack
+    \item If Token is a function or an operator, check the priority of the top element of the operator stack.
+    \begin{itemize}
+      \item if the operator/function on the top of the stack has higher or equal priority to Token, 
+      push it to the output list, repeat until Token has lower priority than the top element of the stack.
+      \item if priority of Token is higher, put it on the output list
+    \end{itemize}
+    \item If Token is a right parenthesis, pop elements off the stack to the output list until a left 
+    parenthesis is found, then discard both the left and right parenthesis.
+    \item If the input list is empty:
+    \begin{itemize}
+      \item While the stack is not empty:
+      \begin{itemize}
+        \item Pop elements off the stack to the output list.
+      \end{itemize}
+    \end{itemize}
+    \item if both the input list and the stack are empty:
+    \begin{itemize}
+      Reverse the output list.
+    \end{itemize}
+\end{itemize}
+\textnormal{
+  The expression has now been converted from infix notation to postfix notation and is now ready to be evaluated.
+}
+\subsection{Evaluate}
+\textnormal{
+  The algorithm is implemented like this in pseudo-code:}
+\begin{itemize}
+  \item While input is not empty, read a Token
+  \begin{itemize}
+    \item If Token is a number then push the value of the number to the stack.
+    \item If Token is a variable 
+    \begin{itemize} 
+      \item Get the value for the variable from the Enviroment and push it to the stack.
+      \item If the variable can't be found in the Enviroment it is undefiened, raise an exception.
+    \end{itemize}
+    \item if Token is a function or operator, pop off as many arguments as the function needs from the stack, evaluate the function 
+    and push the result back to the stack.
+  \end{itemize}
+  \item If input is the empty list, then everything on the stack has been evaluated and only has one element,
+  this element is the result.
+\end{itemize}
+After the expression has been evaluated, the result is put in to the environment as the variable “ans”.
+}
 \iffalse
 
 - Intressanta detaljer
@@ -117,7 +179,7 @@ Smarta lösningar (algoritmer)
 \fi
 
 \subsection{General Analysis}
-\textnormal{In order to keep the main loop running when exceptions are raised a new instance of the main function are run on top of it.}
+\textnormal{}
 \iffalse
 Analys/diskussion
 - Vilka Ãr systemets styrkor/svagheter? -> Sustainability
@@ -125,11 +187,26 @@ Analys/diskussion
 - Tänkbara vidareutvecklingar -> Furture Development
 \fi
 
-\subsubsection{Sustainability}
-\textnormal{}
-
 \subsubsection{Furture Development}
-\textnormal{}
+\textnormal{
+Even though the project started out as an idea to make a simple calculator it has become quite powerfull.
+The user is able to to use most functions available on expensive calculators and store variables for later use
+with a user friendly interface.
+The program can very easily be expanded upon since the way functions and operators are stored is very flexible.
+Allowing the user to define functions could be implemented without much effort, unfourtunitly this is a feature we had
+to skip due to time constraints, but it would be implemented in a similar fashion to variable assignment.
+}
+
+
+\subsubsection{Sustainability}
+\textnormal{
+One major flaw in the program is that error messages aren't always very descriptive.
+The reason for this is that handling exceptions in Standard ML can be a bit tricky.
+Another side effect of it being hard to handle exceptions is that in order to keep the main loop running when 
+exceptions are raised a new instance of the main function are run on top of it. 
+This could in theory make the program crash as the available memory would be depleted, though this would take a very long time.  
+}
+
 
 \section{Brief Conclusion}
 \textnormal{}
@@ -138,7 +215,23 @@ Analys/diskussion
 \fi
 
 \section{Simple Guide for Simple Calculator}
-\textnormal{}
+\textnormal{ 
+Upon starting the application the user will be presented with a command line interface.
+The user simply types in the expression that is to be evaluated.
+
+Typing "help" in the prompt will show a brief overview of the available functions, operators and default variables (such as Pi, e).
+Typing "logo" will display the logo for Abacus.
+Typing "credits" will display information about the creators of the program.
+}
+\subsection{Examples}
+\textnormal{
+  To evaluate the expression 3+(3*4) simply input the expression in the prompt.
+  To use the sin function, simply type sin <expression> where <expression> can be any expression.
+  To assign a variable to the value of the same expression, type
+  "x = 3+(3*4)", where x can be any identifier.
+
+  To get the value of the previous evaluated expression typ "ans".
+}
 \iffalse
 - Användarhandledning med exempel (use cases)
 \fi
@@ -157,5 +250,3 @@ Analys/diskussion
 
 
 \end{document}
-
-
