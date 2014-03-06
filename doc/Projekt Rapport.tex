@@ -22,6 +22,8 @@
 \newpage
 
 
+\includegraphics[width=\textwidth]{Structure}
+
 \section{Introduction}
 \textnormal{A tool that takes mathematical expressions in text form may sound nothing special, but one may have encountered difficulties to find the right symbol on a typing-in calculator to express trigonometric related functions such as "sin", "arctan" etc. However, this program (Abacus) performs as an interpreter and functions just as a "normal" calculator, but can evaluate a whole mathematical expression that is just based on text! No more time wasting looking up symbols, with ability to declare variables, to do more advanced calculation. Interesting? Well, it's just a "calculator".}
 
@@ -63,25 +65,59 @@ En mer detaljerad beskrivning (design)
 
   \item[Enviroment] is a list of variables and their values.
 \end{description}
+
 \subsubsection{Tokenize}
-\textnormal{An expressions can consist of numbers, identifiers of variables, operators and functions, open and close parenthesis and whitespace. Tokenize takes expression represented as a string and splits them into Tokens characterized as Number, Variable, Assignment, Function, Operator, Open and Close parenthesis}
+\textnormal{An expression can consist of number, assignment, identifiers of variable, operator and function, open and close parenthesis and whitespace. Tokenize takes expression represented as a string and splits them into token characterized as Number, Variable, Assignment, Function, Operator, Open and Close parenthesis}
+\begin{itemize}
+\item Number:
 \begin {enumerate}
-  \item \emph{Start}: take in digit 0-9.
-  \item if 0 encountered, either is a 0, or followed by a dot(.) with 0-9 combinations
-  \item if 1-9 encountered, either 1):followed by 0-9 combinations or 2): 0-9 combinations followed by a dot(.) with 0-9 combinations or dot
+\item \emph{Start}: take in digit 0-9.
+\item if 0 encountered, either is a 0, \emph{or} followed by a decimal point with 0-9 combinations
+\item if 1-9 encountered, either \emph{1)}:followed by 0-9 combinations \emph{or} \emph{2)}: 0-9 combinations followed by a dot(.) with 0-9 combinations \emph{or} \emph{3)}: followed by decimal point with 0-9 combinations
 \end{enumerate}
+\item Identifier:
+\begin {enumerate}
+\item \emph{Start}: take in alphabet a-z, A-Z until first digit 0-9 encountered
+\item check if exist in function or operator list
+\begin {itemize}
+\item if exist recognized as an operator or a function, terminate and back to \emph{Start}
+\item if not exist in list, take in the digit encountered and keep on reading a-z, A-Z, 0-9
+\end{itemize}
+\end{enumerate}
+\item Symbolic Operator: take in symbolic operator (such as. *,/,+,-, etc)
+\item Parentheses
+\begin{itemize}
+\item take in left parenthesis (, terminate and back to \emph{Start}
+\item take in right parenthesis ), terminate and back to \emph{Start}
+\end{itemize}
+\item Whitespace: whitespace “ “ encountered, terminate and back to \emph{Start}
+  
+\end{itemize}
 
 \subsubsection{Validate}
+textnormal{
 \begin {enumerate}
-  \item ads
-  \item sdf
+Validate is achieved with recursive descent parser. \newline 
+Validate is implemented using a recursive descent parser algorithm.
+It is made from a number of mutually recursive states, the states being:
+
+\newline A has two constructs, either Variable = A, or E}
+\newline E is an expression and has two constructs, N op E, and N
+\newline N also has two constructs, either its T, or –T
+\newline T the  
+\begin {itemize}
+  \item A \Rightarrow Var = A | E
+  \item E \Rightarrow N op E | N
+  \item N \Rightarrow T | -T
+  \item T \Rightarrow Num | Var | fun N | (E)
+\end{itemize}
 \end{enumerate}
 
 \subsubsection{Translate}
 \textnormal{The method for converting an expression in infix notation to postfix notation makes use of two lists, the first one holding the input and the second one holding the output, and a stack that holds the operators, functions and parentheses. 
-This algorithm is called the \emph{Shunting-yard algorithm} and was invented by \emph{Edsger Wybe Dijkstra}.
+This algorithm is called the \emph{Shunting-yard algorithm} and was invented by \emph{Edsger Wybe Dijkstra}\cite{dijkstra}.
 
-
+}
 }
 \subsubsection{Evaluate}
 \textnormal{Evaluate is implemented with an algorithm that makes use of an Enviroment, a stack and a list containing the input.
@@ -92,9 +128,9 @@ After the evaluation is done the result will be added to a Variable called "ans"
 
 \subsubsection{Alternative algorithms}
 \textnormal{There are other ways of evaluating mathematical expressions. Instead of first converting the expression from infix notation to postfix 
-notation using the \emph{shunting-yard algorithm}\noteToSelf{dijkstra} and then evaluating it, an abstract syntax tree could be built while reading the input.
+notation using the \emph{shunting-yard algorithm} and then evaluating it, an abstract syntax tree could be built while reading the input.
 That could be achieved with an algorithm similar to the one used
-in this program to validate the expression. That is, using an \emph{top down recursive descent algoithm}\noteToSelf{Tommys bok}
+in this program to validate the expression. That is, using an \emph{top down recursive descent algoithm}\cite{rda}
 If an abstract syntax tree was used the expression could then be evaluated by simple traversing the tree and evaluate the operators
 and functions as they are encountered.
 
@@ -115,11 +151,18 @@ Smarta lösningar (algoritmer)
 \subsection{Implementation}
 \textnormal{Logotype is presented and there is a user manual built into the program, by typing “help”, user can get user guide on how to use the program. \newline \newline Test cases are included for every source code file. \newline \newline It is easy to add more support for functions and operators because priority is not part of the validation but is handled in the translation part.}
 
-\subsection{Tokenize}
-\subsection{Validate}
-\subsection{Translate}
+\subsubsection{Tokenize implemitation}
 \textnormal{
-  The algorithm is implemented like this in pseudo-code:
+ 
+}
+\subsubsection{Validate implemetation}
+\textnormal{
+Validate is implemented using a recursive descent parser algorithm.
+It is made from a number of mutually recursive states
+}
+\subsubsection{Translate implemetation}
+\textnormal{
+The algorithm is implemented like this in pseudo-code:
 }
 
 \begin{itemize}
@@ -150,7 +193,7 @@ Smarta lösningar (algoritmer)
 \textnormal{
   The expression has now been converted from infix notation to postfix notation and is now ready to be evaluated.
 }
-\subsection{Evaluate}
+\subsubsection{Evaluate implemetation}
 \textnormal{
   The algorithm is implemented like this in pseudo-code:}
 \begin{itemize}
@@ -179,7 +222,7 @@ After the expression has been evaluated, the result is put in to the environment
 \fi
 
 \subsection{General Analysis}
-\textnormal{}
+\textnormal{Abacus is a tool with feature of being handy and flexible, though user might find it clueless when error message happens. When expressions become long and more advanced, it can be more time-consuming to get result.}
 \iffalse
 Analys/diskussion
 - Vilka Ãr systemets styrkor/svagheter? -> Sustainability
@@ -189,12 +232,12 @@ Analys/diskussion
 
 \subsubsection{Furture Development}
 \textnormal{
-Even though the project started out as an idea to make a simple calculator it has become quite powerfull.
+Even though the project started out as an idea to make a simple calculator it has become quite powerful.
 The user is able to to use most functions available on expensive calculators and store variables for later use
 with a user friendly interface.
 The program can very easily be expanded upon since the way functions and operators are stored is very flexible.
-Allowing the user to define functions could be implemented without much effort, unfourtunitly this is a feature we had
-to skip due to time constraints, but it would be implemented in a similar fashion to variable assignment.
+Allowing the user to define functions could be implemented without much effort, unfourtunitly this is a feature that had
+to be skipped due to time constraints, but it would be implemented in a similar fashion to variable assignment.
 }
 
 
@@ -208,8 +251,17 @@ This could in theory make the program crash as the available memory would be dep
 }
 
 
-\section{Brief Conclusion}
-\textnormal{}
+\section{Conclusion}
+\textnormal{
+We picked this project knowing that we would be in for a challange.
+Before we could start writing the code we had to read about different ways
+of solving the problems we expected to encounter.
+Writing the parser that is used in the Validate part was especially problamatic but by
+reading more about top down recursive algorithms we managed to solve it.
+
+In the end we are very satisfied with the result, it is a very functional program that has almost all of the features
+we had planned for.
+}
 \iffalse
 - Avslutning: Sammanfattning, diskussion, slutsatser
 \fi
@@ -225,10 +277,10 @@ Typing "credits" will display information about the creators of the program.
 }
 \subsection{Examples}
 \textnormal{
-  To evaluate the expression 3+(3*4) simply input the expression in the prompt.
-  To use the sin function, simply type sin <expression> where <expression> can be any expression.
+  To evaluate the expression $3+(3 \cdot 4)$ simply input the expression in the prompt.
+  To use the sin function, simply type $sin~ expression$ where $expression$ can be any expression.
   To assign a variable to the value of the same expression, type
-  "x = 3+(3*4)", where x can be any identifier.
+  $x = 3+(3 \cdot 4)$, where x can be any identifier.
 
   To get the value of the previous evaluated expression typ "ans".
 }
@@ -239,11 +291,18 @@ Typing "credits" will display information about the creators of the program.
 
 
 \begin{thebibliography}{breitestes Label}
-\bibitem{}
+\bibitem{dijkstra}
   % info...
+  MR 34/61
+  Algol 60 translation : An algol 60 translator for the x1 and making a translator for algol 60
+  1961
   \emph{}
 	
-\bibitem{}
+\bibitem{rda}
+  Alfred Aho, Monica Lam, Ravi Sethi, Jeffry Ullman \\
+  Compilers: Principles, techniques and tools, second edition. Chapter 5, page 338 \\ 
+  Pearson internation edition 2006 \\
+  ISBN: 978-0-321-49169-5
 	
 \end{thebibliography}
 
