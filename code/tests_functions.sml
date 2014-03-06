@@ -29,7 +29,7 @@ tokenize : string -> token list;
    SIDE-EFFECTS: Prints a report, stating whether each test case performed as
                  expected.
  *)
- val testStack = push(push(EmptyStack,5.0),7.0);
+ 
 fun test () =
     let
 
