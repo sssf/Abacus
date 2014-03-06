@@ -1,8 +1,9 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage[]{fullpage}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 \usepackage{graphicx}
+\usepackage{url}
 
 
 \title {Abacus \\ Interpreter for mathematical expressions in SML}
@@ -22,14 +23,12 @@
 \newpage
 
 
-\includegraphics[width=\textwidth]{Structure}
-
 \section{Introduction}
 \textnormal{A tool that takes mathematical expressions in text form may sound nothing special, but one may have encountered difficulties to find the right symbol on a typing-in calculator to express trigonometric related functions such as "sin", "arctan" etc. However, this program (Abacus) performs as an interpreter and functions just as a "normal" calculator, but can evaluate a whole mathematical expression that is just based on text! No more time wasting looking up symbols, with ability to declare variables, to do more advanced calculation. Interesting? Well, it's just a "calculator".}
 
-\section{"Calculator" in SML}
+\section{Abacus - Calculator in SML}
 \subsection{Design and Structure}
-\textnormal{There are three major parts of the system: Input, Compiler and Evaluation which are combined into a REPL\footnote{Read-Evaluate-Print Loop, more about REPL, please refer to http://en.wikipedia.org/wiki/REPL}. All these parts are strictly sequential between each other. All steps inside a part are to build preparation work for next part, and all three parts form a successive execution. Executions can be achieved as many times as user need.}
+\textnormal{There are three major parts of the system: Input, Compiler and Evaluation which are combined into a REPL\footnote{Read-Evaluate-Print Loop, more about REPL, please refer to \url{http://en.wikipedia.org/wiki/REPL}}. All these parts are strictly sequential between each other. All steps inside a part are to build preparation work for next part, and all three parts form a successive execution. Executions can be achieved as many times as user need.}
 \subsubsection{Structure Overview}
 \begin{description}
   \item [Input] \hfill \\Handles input text, takes the input and passes it to the compiler.
@@ -43,7 +42,7 @@
   \begin {itemize}
     \item Numbers are pushed onto the stack.
     \item Variables are looked up and get pushed onto the stack.
-    \item Functions and operators takes item(s) off from the stack and push the evaluated result back onto the stack
+    \item Functions and operators take item(s) off from the stack and push the evaluated result back onto the stack
   \end {itemize}
 \end{description}
 
@@ -69,13 +68,13 @@ En mer detaljerad beskrivning (design)
 \subsubsection{Tokenize}
 \textnormal{An expression can consist of number, assignment, identifiers of variable, operator and function, open and close parenthesis and whitespace. Tokenize takes expression represented as a string and splits them into token characterized as Number, Variable, Assignment, Function, Operator, Open and Close parenthesis}
 \begin{itemize}
-\item Number:
+\item Number (\textit{ex: 1.2 , 0.9 , 34.5 , 0}):
 \begin {enumerate}
 \item \emph{Start}: take in digit 0-9.
 \item if 0 encountered, either is a 0, \emph{or} followed by a decimal point with 0-9 combinations
 \item if 1-9 encountered, either \emph{1)}:followed by 0-9 combinations \emph{or} \emph{2)}: 0-9 combinations followed by a dot(.) with 0-9 combinations \emph{or} \emph{3)}: followed by decimal point with 0-9 combinations
 \end{enumerate}
-\item Identifier:
+\item Identifier (\textit{ex: a1 , Ea9d , d}):
 \begin {enumerate}
 \item \emph{Start}: take in alphabet a-z, A-Z until first digit 0-9 encountered
 \item check if exist in function or operator list
@@ -95,30 +94,30 @@ En mer detaljerad beskrivning (design)
 \end{itemize}
 
 \subsubsection{Validate}
-textnormal{
-\begin {enumerate}
+\textnormal{
 Validate is achieved with recursive descent parser. \newline 
 Validate is implemented using a recursive descent parser algorithm.
-It is made from a number of mutually recursive states, the states being:
+It is made from a number of mutually recursive states, the states being:}
 
-\newline A has two constructs, either Variable = A, or E}
-\newline E is an expression and has two constructs, N op E, and N
-\newline N also has two constructs, either its T, or –T
-\newline T the  
-\begin {itemize}
-  \item A \Rightarrow Var = A | E
-  \item E \Rightarrow N op E | N
-  \item N \Rightarrow T | -T
-  \item T \Rightarrow Num | Var | fun N | (E)
+\begin{description}
+  \item [A] has two constructs, either Variable = A, or E}
+  \item [E] is an expression and has two constructs, N op E, and N
+  \item [N] has two constructs, either its T, or –T
+  \item [T] has four contructs: Number | Variable | Function on N | (E) 
+\end{description}
+
+\begin{itemize}
+    \item $A \Rightarrow Var = A | E$
+    \item $E \Rightarrow N op E | N$
+    \item $N \Rightarrow T | -T$
+    \item $T \Rightarrow Number | Variable | Function N | (E)$
 \end{itemize}
-\end{enumerate}
-
 \subsubsection{Translate}
 \textnormal{The method for converting an expression in infix notation to postfix notation makes use of two lists, the first one holding the input and the second one holding the output, and a stack that holds the operators, functions and parentheses. 
 This algorithm is called the \emph{Shunting-yard algorithm} and was invented by \emph{Edsger Wybe Dijkstra}\cite{dijkstra}.
 
 }
-}
+
 \subsubsection{Evaluate}
 \textnormal{Evaluate is implemented with an algorithm that makes use of an Enviroment, a stack and a list containing the input.
 It takes a list of Tokens as input, a stack and an enviroment that holds all the variables.
@@ -192,7 +191,53 @@ The algorithm is implemented like this in pseudo-code:
 \end{itemize}
 \textnormal{
   The expression has now been converted from infix notation to postfix notation and is now ready to be evaluated.
+  \newline
+  \newline
 }
+
+\textnormal{Example: \newline
+\textit{ A + B * C + D}
+\newline
+\textit{A is a number, so move it to the output list. }
+\newline
+}
+\includegraphics[width=15cm]{shunting_yard_algoritm_ab}
+\textnormal{
+\newline
+\textit{+ is an operator, push it to the stack. \newline
+B is a number, put it on the output list.}
+\newline
+}
+\includegraphics[width=15cm]{shunting_yard_algoritm_cd}
+\textnormal{
+\newline
+\textit{* is an operator and has higher priority than +, push it to the stack. \newline
+C is a number, put it on the output list.}
+\newline
+}
+\includegraphics[width=15cm]{shunting_yard_algoritm_ef}
+
+\textnormal{
+\newline
+\textit{+ is an operator with lower priority than *, pop * off the stack to the output list. \newline
++ is an operator with equal priority to +, pop + off the stack to the output list. \newline
+D is a number, put it on the output list.}
+\newline
+}
+\includegraphics[width=15cm]{shunting_yard_algoritm_gh}
+
+\textnormal{
+\newline
+\textit{Input list is empty, so pop everything off the stack to the output list.} \newline
+\footnote{Images from wikipedia. \url{http://en.wikipedia.org/wiki/File:Shunting_yard.svg}}
+}
+\includegraphics[width=8cm]{shunting_yard_algoritm_i}
+
+
+
+
+
+
 \subsubsection{Evaluate implemetation}
 \textnormal{
   The algorithm is implemented like this in pseudo-code:}
