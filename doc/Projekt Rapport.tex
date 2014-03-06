@@ -5,7 +5,7 @@
 \usepackage{graphicx}
 \usepackage{url}
 
-
+\begin{titlepage}
 \title {Abacus \\ Interpreter for mathematical expressions in SML}
 \author{
   Vågbratt, Tommy
@@ -14,11 +14,10 @@
 	\and
   Jin, Wenting}
 \date{\today}
-
-
+\maketitle
+\end{titlepage}
 \begin{document}
 
-\maketitle
 \tableofcontents
 \newpage
 
@@ -53,7 +52,7 @@ En mer detaljerad beskrivning (design)
 
 - Vilka datastrukturer används? Beskriv abstrakta datatyper (gränssnitt/interface)
 \fi
-
+\newpage
 \subsection{Algorithms and Alternatives}
 \textnormal{ Data-types used in this program: Stack, Token, Environment.}
 \begin{description}
@@ -92,7 +91,7 @@ En mer detaljerad beskrivning (design)
 \item Whitespace: whitespace “ “ encountered, terminate and back to \emph{Start}
   
 \end{itemize}
-
+\newpage
 \subsubsection{Validate}
 \textnormal{
 Validate is achieved with recursive descent parser. \newline 
@@ -148,17 +147,84 @@ Smarta lösningar (algoritmer)
 \fi
 
 \subsection{Implementation}
-\textnormal{Logotype is presented and there is a user manual built into the program, by typing “help”, user can get user guide on how to use the program. \newline \newline Test cases are included for every source code file. \newline \newline It is easy to add more support for functions and operators because priority is not part of the validation but is handled in the translation part.}
+\textnormal{In this section the functions Tokenize, Validate, Translate and Evaluate will be presented more in detail separately as followed.
+}
 
 \subsubsection{Tokenize implemitation}
 \textnormal{
- 
+ The first step in order to evaluate an input expression is to break up into its fundamental parts, called tokens. A token generally consists of two parts, a type or category and the string match when it was created. The categories of tokens are the following:
+\newline
 }
-\subsubsection{Validate implemetation}
+\begin{itemize}
+  \item Number
+  \item Variable
+  \item Function
+  \item Operator
+  \item Assignment
+  \item Negate
+  \item Open (parentheses)
+  \item Close  (parentheses)
+\end{itemize}
+
 \textnormal{
-Validate is implemented using a recursive descent parser algorithm.
-It is made from a number of mutually recursive states
+  \newline
+  In order to recognises a token and decide which category it belongs to a, tokenize combines a series of transition diagrams for recognizing each token into a larger more complex diagram. The concept is quite simple, it consist of a states (which are drawn as circles) and transitions (which are drawn as arrows) between them. A state is called accepting (which is marked with double circles) if terminating in it means a valid token was found. Transitions have a condition check that must be satisfied to move to state it points to.
 }
+\includegraphics[width=6cm]{parentheses}
+
+\textnormal{
+  \newline
+  In figure(Open,Closed) above show the transition diagram for parentheses. The initial state is labelled start. Start is non-accepting and has two to transitions. The top one goes to p1 if and only if the next character is “(“.  The bottom one goes to p2 if and only if the next character is “)”. Neither p1 or p2 has any transitions, but both states are accepting and terminating in them will generate the corresponding token.
+  \newline
+}
+\includegraphics[width=6cm]{whitespace}
+
+\textnormal{
+  \newline
+  Figure (whitespace) show the transition diagram for whitespace. Whitespace is important in order to separate tokens, but no token is generated for whitespace because once an expression is split into tokens whitespace is obsolete.
+  \newline
+}
+\includegraphics[width=6cm]{symbolic_operator}
+\textnormal{
+  Figure(symbolic operator) show the transition diagram for symbolic operator. In order to transition from start to the accepting state o1 next character have to match a symbolic operator such as “+”, “-“, etc. 
+  \newline
+}
+
+\includegraphics[width=12cm]{number}
+\textnormal{
+  \newline
+  Figure(number) show the more complex transition diagram for matching numbers. From the initial state Start has two transitions, “1-9” to n1 and “0” to n2. The accepting state n1 has two transitions, “0-9” to itself(n1) and “.” To n3. The state n2 is also accepting, but only have one transition, “.” to n3. The state n3 only have one transition, “0-9” to n4. Notice that n3 is non-accepting. The last state n4 is accepting and transitions back to itself on “0-9”.
+  \newline
+}
+
+\includegraphics[width=12cm]{indentifier}
+\textnormal{
+  \newline
+  Figure(identifier) show the transition diagram for functions, variables and non-symbolic operator(div, mod, etc). The initial state Start has the transition, on “A-Z” or “a-z” to i1. The state i1 is an accepting state and it has two transitions, “A-Z” or “a-z” to itself(i1) and “0-9” to i2. The transition “0-9” to i2 is special because before the character “0-9” is added to the characters read before, a lookup to see if the characters read before match a non-symbolic operator or function. If a match is found the corresponding token is generated. The accepting state i2 only have one transition, “A-Z” or “a-z” or “0-9” to itself (i2). Terminating inside of i1 or i2 will trigger a lookup to see if the characters found match a non-symbolic operator or function. If a match is found the corresponding token is generated, otherwise a variable token is generated. This means that non-symbolic operator and function have higher priority than variables. Also Non-symbolic operator has higher priority than function.
+  \newline
+}
+\includegraphics[width=14cm]{automata_fixed}
+\textnormal{
+  \newline
+  Figure (transition diagram) show how the diagrams above are combined. Tokenize works recursively when any exception case is reached. Tokenize generate tokens by recursively pulling tokens of the  input.
+  \newline
+}
+
+\subsubsection{Validate implemetation}
+\begin{itemize}
+  \item $A => Variable = E | E$
+  \item $E=> N operator E | N$
+  \item $N => T | -T$
+  \item $T=> Number | Variable | Function N | (E)$
+  \end{itemize}
+\textnormal{
+
+Expressions are built up in a recursive way, for example “1+2+3” 
+Validate is implemented using a recursive-descent algorithm. The first token from input list starts from A which has two constructs and matches to either Variable or E, then gets into respective matching cases. Such match is constructed with other three parts: E, N and T. As shown above, all these parts can be a partial construct to the other, they are mutually recursive. Once a token gets validated through such recursive process, and not all the input has been consumed, the next token will start from A and get validated just as what happened to the first token. Successive validation happens recursively, and invalid validation returns immediately.
+}
+\includegraphics[height=10cm]{x_equal_negate_1_times_sin_pi_div_2}
+
+
 \subsubsection{Translate implemetation}
 \textnormal{
 The algorithm is implemented like this in pseudo-code:
@@ -194,9 +260,8 @@ The algorithm is implemented like this in pseudo-code:
   \newline
   \newline
 }
-
-\textnormal{Example: \newline
-\textit{ A + B * C + D}
+\newpage
+\textnormal{Example: \textit{ A + B * C + D}
 \newline
 \textit{A is a number, so move it to the output list. }
 \newline
@@ -267,7 +332,8 @@ After the expression has been evaluated, the result is put in to the environment
 \fi
 
 \subsection{General Analysis}
-\textnormal{Abacus is a tool with feature of being handy and flexible, though user might find it clueless when error message happens. When expressions become long and more advanced, it can be more time-consuming to get result.}
+\textnormal{Abacus is a tool with feature of being handy and flexible, though user might find it clueless when error message happens. When expressions become long and more advanced, it can be more time-consuming to get result. \newline
+Logotype is presented and there is a user manual built into the program, by typing “help”, user can get user guide on how to use the program. \newline \newline Test cases are included for every source code file. \newline \newline It is easy to add more support for functions and operators because priority is not part of the validation but is handled in the translation part.}
 \iffalse
 Analys/diskussion
 - Vilka Ãr systemets styrkor/svagheter? -> Sustainability
@@ -293,6 +359,11 @@ The reason for this is that handling exceptions in Standard ML can be a bit tric
 Another side effect of it being hard to handle exceptions is that in order to keep the main loop running when 
 exceptions are raised a new instance of the main function are run on top of it. 
 This could in theory make the program crash as the available memory would be depleted, though this would take a very long time.  
+
+
+
+
+
 }
 
 
