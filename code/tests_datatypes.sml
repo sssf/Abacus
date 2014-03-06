@@ -8,17 +8,9 @@ use "datatypes.sml";
 
 To run these training cases:
    1) launch PolyML shell [poly]
-   2) load hand-in [use "crypto.sml"] TODO:
-   3) load training set [use "template_tests.sml"]
-   4) run tests [test ()]
+   2) load training set [use "template_tests.sml"]
+   3) run tests [test ()]
 *)
-
-
-
-(* check function types *) (*
-tokenize : string -> token list;
-*)
-
 
 
 (* test ()

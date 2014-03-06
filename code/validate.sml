@@ -26,8 +26,8 @@ local
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are a valid construct of "E", otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
+     EXAMPLE: E([Number "1", Operator "+", Number "2", Operator "*", Function "sin", Open, Number "2", Operator "*", Variable "Pi", Close]) = (true, [])
   *)
   and E ([])     = (false, [])
     | E (tokens) =
@@ -52,8 +52,8 @@ local
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are a valid construct of "N", otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
+     EXAMPLE: see function E above
   *)
   and N([]) = (false, [])
     | N(tokens) =
@@ -78,8 +78,8 @@ local
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are valid construct of "T", otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
+     EXAMPLE: see function E above
   *)
   and T([]) = (false, [])
     | T(tokens) =
@@ -107,23 +107,12 @@ local
     end
 
 
-  (* e0(tokens)
-     TYPE: token list -> (bool * token list)
-     PRE: true
-     POST: true and remaining tokens if tokens are a valid construct of "Variable = E", otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
-  *) (*
-  and e0(Variable(_)::Assignment::rest) = E(rest)   (* Variable = E *)
-    | e0(tokens)                       = (false, tokens)
-    *)
 
   (* e0(tokens)
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are a valid construct of "N Operator E", otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
   *)
   and e0(tokens) =  (* N operator E *)
     let
@@ -154,8 +143,7 @@ local
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are a valid construct of "N", otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
   *)
   and e1(tokens) = N(tokens)   (* N *)
 
@@ -165,8 +153,7 @@ local
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are a valid construct of "T", otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
   *)
   and n0(tokens) = T(tokens)        (* T *)
 
@@ -175,7 +162,7 @@ local
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens if tokens are a valid construct of "-T", otherwise false and tokens
-     VARIANT: TODO
+     VARIANT: |tokens|
      EXAMPLE: TODO
   *)
   and n1(Negate::rest) = T(rest)   (* -T *)
@@ -188,8 +175,6 @@ local
      POST: true and tail of tokens if head of tokens is a Number,
            true and tail of tokens if head of tokens is a Variable
            otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
   *)
   and t0 (Number(_)::rest)   = (true, rest)     (* number *)
     | t0 (Variable(_)::rest) = (true, rest)     (* variable *)
@@ -200,8 +185,7 @@ local
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and tail of tokens if head of tokens is a Function, otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
   *)
   and t1(Function(_)::rest) = N(rest)           (* "Function N" *)
     | t1(tokens)            = (false, tokens)
@@ -212,8 +196,7 @@ local
      TYPE: token list -> (bool * token list)
      PRE: true
      POST: true and remaining tokens, if tokens match the construct "(E)", otherwise false and tokens
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
   *)
   and t2(Open::rest) = (* match "(" *)
     let
@@ -222,8 +205,6 @@ local
          TYPE: token list -> (bool * token list)
          PRE: true
          POST: true and tail of tokens if head of tokens is a Closed token, otherwise false and tokens
-         VARIANT: TODO
-         EXAMPLE: TODO
       *)
       fun close(Closed::rest) = (true, rest)
         | close(tokens)       = (false, tokens)
@@ -243,44 +224,12 @@ in
      TYPE: token list -> bool
      PRE: true
      POST: true if tokens are a valid construct of "A" and no tokens remaining (see above or documentation ), false otherwise
-     VARIANT: TODO
-     EXAMPLE: TODO
+     VARIANT: |tokens|
+     EXAMPLE: validate([Number "1", Operator "+", Number "2", Operator "*", Function "sin", Open, Number "2", Operator "*", Variable "Pi", Close]) = true
   *)
   fun validate(tokens) = A(tokens) = (true, [])
 
 end;
-
-
-
-
-(* testing part *)
-fun valid(exp) = ((*print("===========================================================\n");*) print(exp^"\n"); validate(tokenize(exp)));
-
-
-fun test() = (valid("1") = true andalso
-              valid("-1") = true andalso
-              valid("1 + 1") = true andalso
-              valid("1 + -1") = true andalso
-              valid("-1 + 1") = true andalso
-              valid("sin 3") = true andalso
-              valid("sin x") = true andalso
-              valid("sin (x*2)") = true andalso
-              valid("sin cos x") = true andalso
-              valid("1 * (2 + 3)") = true andalso
-              valid("x = 10") = true andalso
-              valid("x = 10 * 2") = true andalso
-              valid("x = y") = true andalso
-              valid("x = y = 42") = true andalso
-
-
-              valid("++1") = false andalso
-              valid("1++") = false andalso
-              valid("1*+1") = false andalso
-              valid("1 sin") = false andalso
-              valid("* sin 1") = false andalso
-              valid("00") = false andalso
-              valid("-1 * sin sin sin sin sin sin") = false);
-
 
 
 

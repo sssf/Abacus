@@ -12,17 +12,9 @@ use "evaluate.sml";
 
 To run these training cases:
    1) launch PolyML shell [poly]
-   2) load hand-in [use "crypto.sml"] TODO:
-   3) load training set [use "template_tests.sml"]
-   4) run tests [test ()]
+   2) load training set [use "template_tests.sml"]
+   3) run tests [test ()]
 *)
-
-
-
-(* check function types *) (*
-tokenize : string -> token list;
-*)
-
 
 
 (* test ()
@@ -48,12 +40,12 @@ fun test () =
         in
           abs(diff) < 0.000001
         end
-      
+
       fun result (n, f) =
           print ("Test #" ^ Int.toString n ^
            ((if f n then " successful." else " FAILED!")
             handle _ => " raised an (unwanted) exception!") ^ "\n");
-      
+
 
       val testEnviroment = Enviroment([("Pi", Math.pi),
                                     ("e",  Math.e),("milo4306", 1333.7)])

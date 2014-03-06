@@ -29,12 +29,18 @@ local
      TYPE: token list -> token list
      PRE:  true
      POST: tokens with negation corrected
-     VARIANT: |tokens|
      EXAMPLE: fixNegation([Number("1"), Operator("+"), Operator("-"), Variable("x")]) = [Number("1"), Operator("+"), Negate, Variable("x")]
   *)
   fun fixNegation(Operator("-")::rest) = fixNegation(Negate::rest)
     | fixNegation(tokens) =
     let
+      (* fixNegation(tokens)
+         TYPE: token list -> token list
+         PRE:  true
+         POST: tokens with negation corrected
+         VARIANT: |tokens|
+         EXAMPLE: fixNegation([Number("1"), Operator("+"), Operator("-"), Variable("x")]) = [Number("1"), Operator("+"), Negate, Variable("x")]
+      *)
       fun fixNegation'([]) = []
         | fixNegation'([token]) = [token]
         | fixNegation'(Operator(x)::Operator("-")::rest) = Operator(x)::fixNegation'(Negate::rest)
@@ -50,8 +56,10 @@ local
      TYPE: char list -> token list
      PRE:  true
      POST: charList translated into tokens according to specification
-     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters. (see specification) TODO: Peter will get back about this.
-     EXAMPLE: start(
+     VARIANT: |charList|
+     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters.
+     EXAMPLE: start([#"1", #" ", #"+", #" ", #"2", #" ", #"*", #" ", #"s", #"i", #"n", #"(", #"2", #"*", #"P", #"i", #")"]) =
+                [Number "1", Operator "+", Number "2", Operator "*", Function "sin", Open, Number "2", Operator "*", Variable "Pi", Close];
   *)
   fun start([]) = []
     | start(head::tail) =
@@ -77,7 +85,9 @@ local
      TYPE: char list * char list -> token list
      PRE: true
      POST: charList converted to tokens, but first token may be invalid
-     EXAMPLE: see function start
+     VARIANT: |charList|
+     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters.
+     EXAMPLE: see function "start" above
   *)
   and n1([], acc) = [Number(accToString(acc))]
     | n1(head::tail, acc) =
@@ -92,8 +102,10 @@ local
   (* n2(charList, acc)
      TYPE: char list * char list -> token list
      PRE:  true
-     POST: charList converted to tokens, but first token:
-     EXAMPLE: TODO
+     POST: charList converted to tokens, but first token may be invalid
+     VARIANT: |charList|
+     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters.
+     EXAMPLE: see function "start" above
   *)
   and n2([], acc) = [Number(accToString(acc))]
     | n2(head::tail, acc) =
@@ -105,9 +117,11 @@ local
 
   (* n3(charList, acc)
      TYPE: char list * char list -> token list
-     PRE:  TODO
-     POST: TODO
-     EXAMPLE: TODO
+     PRE:  true
+     POST: charList converted to tokens, but first token may be invalid
+     VARIANT: |charList|
+     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters.
+     EXAMPLE: see function "start" above
   *)
   and n3([], acc) = raise Fail "digit expected, but nothing was found"
     | n3(head::tail, acc) =
@@ -119,9 +133,11 @@ local
 
   (* n4(charList, acc)
      TYPE: char list * char list -> token list
-     PRE:  TODO
-     POST: TODO
-     EXAMPLE: TODO
+     PRE:  true
+     POST: charList converted to tokens, but first token may be invalid
+     VARIANT: |charList|
+     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters.
+     EXAMPLE: see function "start" above
   *)
   and n4([], acc) = [Number(accToString(acc))]
     | n4(head::tail, acc) =
@@ -134,9 +150,11 @@ local
   (* indentifiers *)
   (* i1(charList, acc)
      TYPE: char list * char list -> token list
-     PRE:  TODO
-     POST: TODO
-     EXAMPLE: TODO
+     PRE:  true
+     POST: charList converted to tokens, but first token may be invalid
+     VARIANT: |charList|
+     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters.
+     EXAMPLE: see function "start" above
   *)
   and i1([], acc) = [tokenForIdentifier(accToString(acc))]
     | i1(head::tail, acc) =
@@ -153,9 +171,11 @@ local
 
   (* i2(charList, acc)
      TYPE: char list * char list -> token list
-     PRE:  TODO
-     POST: TODO
-     EXAMPLE: TODO
+     PRE:  true
+     POST: charList converted to tokens, but first token may be invalid
+     VARIANT: |charList|
+     SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters.
+     EXAMPLE: see function "start" above
   *)
   and i2([], acc) = [tokenForIdentifier(accToString(acc))]
     | i2(head::tail, acc) =
@@ -166,12 +186,13 @@ local
 
 
 in
-  (* tokenize(str)
+  (* tokenize(exp)
      TYPE: string -> token list
      PRE:  true
-     POST: list of tokens in str
+     POST: list of tokens in exp
+     SIDE-EFFECTS: raises Fail exeption if exp contain invalid characters. (see report)
      EXAMPLE: tokenize("2 * sin(x)") = [Number("2"), Operator("*"), Function("sin"), Open, Variable("x"), Close]
   *)
-  fun tokenize(str) = fixNegation(start(explode(str)))
+  fun tokenize(exp) = fixNegation(start(explode(exp)))
 
 end;
