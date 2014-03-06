@@ -4,7 +4,7 @@ local
      TYPE: char list -> string
      PRE:  true
      POST: acc reversed and converted to string
-     EXAMPLE: TODO
+     EXAMPLE: accToString([#"s", #"n", #"a"]) = "ans"
   *)
   fun accToString(acc) = implode(List.rev(acc));
 
@@ -30,7 +30,7 @@ local
      PRE:  true
      POST: tokens with negation corrected
      VARIANT: |tokens|
-     EXAMPLE: TODO
+     EXAMPLE: fixNegation([Number("1"), Operator("+"), Operator("-"), Variable("x")]) = [Number("1"), Operator("+"), Negate, Variable("x")]
   *)
   fun fixNegation(Operator("-")::rest) = fixNegation(Negate::rest)
     | fixNegation(tokens) =
@@ -48,16 +48,16 @@ local
 
   (* start(charList)
      TYPE: char list -> token list
-     PRE:  TODO
+     PRE:  true
      POST: charList translated into tokens according to specification
      SIDE-EFFECTS: raises Fail exeption if charList contain invalid characters. (see specification) TODO: Peter will get back about this.
-     EXAMPLE: TODO
+     EXAMPLE: start(
   *)
   fun start([]) = []
     | start(head::tail) =
       if head = #"0" then (* numbers beginning with 0 *)
         n2(tail, [head])
-      else if Char.isDigit(head) then (* numbers beginning with 1-9 *) 
+      else if Char.isDigit(head) then (* numbers beginning with 1-9 *)
         n1(tail, [head])
       else if Char.isAlpha(head) then  (* identifiers, functions, and non-symbolic operators *)
         i1(tail,[head])
@@ -75,9 +75,9 @@ local
   (* numbers *)
   (* n1(charList, acc)
      TYPE: char list * char list -> token list
-     PRE:  TODO
-     POST: TODO
-     EXAMPLE: TODO
+     PRE: true
+     POST: charList converted to tokens, but first token may be invalid
+     EXAMPLE: see function start
   *)
   and n1([], acc) = [Number(accToString(acc))]
     | n1(head::tail, acc) =
@@ -91,8 +91,8 @@ local
 
   (* n2(charList, acc)
      TYPE: char list * char list -> token list
-     PRE:  TODO
-     POST: TODO
+     PRE:  true
+     POST: charList converted to tokens, but first token:
      EXAMPLE: TODO
   *)
   and n2([], acc) = [Number(accToString(acc))]

@@ -1,0 +1,3 @@
+
+Welcome to Abacus!
+Type "help" or "credits" for more information. Type "exit" or "quit" to exit.
