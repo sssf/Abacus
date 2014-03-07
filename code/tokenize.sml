@@ -44,6 +44,7 @@ local
       fun fixNegation'([]) = []
         | fixNegation'([token]) = [token]
         | fixNegation'(Operator(x)::Operator("-")::rest) = Operator(x)::fixNegation'(Negate::rest)
+        | fixNegation'(Assignment::Operator("-")::rest) = Assignment::fixNegation'(Negate::rest)
         | fixNegation'(Negate::Operator("-")::rest) = Negate::fixNegation'(Negate::rest) (* micael really wanted support for --...-x *)
         | fixNegation'(Function(x)::Operator("-")::rest) = Function(x)::fixNegation'(Negate::rest)
         | fixNegation'(Open::Operator("-")::rest) = Open::fixNegation'(Negate::rest)

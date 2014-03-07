@@ -9,7 +9,7 @@ use "input.sml";
 
 
 (* recursive-descent parser implmenenting the following language:
-    A -> Variable = E | E
+    A -> Variable = A | E
     E -> N Operator E | N
     N -> T | -T
     T -> Number | Variable | Function N | (E)
