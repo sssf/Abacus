@@ -1,38 +1,29 @@
 
-For more detailed information see the documentation.
+For more detailed information 
+see the documentation.
 
-commands
--------------------------------
-help      - open help
-credits   - show credits
-logo      - show Abacus logo
-
-quit      - exit Abacus
-exit      - exit Abacus
-:q        - exit Abacus
-:w        - exit Abacus
-
-variables
--------------------------------
-Pi        - 3.141592654
-e         - 2.718281828
-
-function
--------------------------------
-sin       - sinus x
-cos       - cosinus x
-tan       - tangens x
-abs       - |x|
-
-operators
--------------------------------
-
-+         - Addition
--         - Subtraction
-*         - Multiplication
-/         - Division
-mod       - Modulus
-div       - Integer division
-()        - Parentheses
-
-
+commands                         |  function
+-------------------------------  |  -------------------------------
+help      - open help            |  sin       - sine
+credits   - show credits         |  arcsin    - arcsine
+logo      - show Abacus logo     |  cos       - cosine 
+                                 |  arcos     - arcosine                                    
+quit      - exit Abacus          |  tan       - tangens 
+exit      - exit Abacus          |  arctan    - arctangens 
+:q        - exit Abacus          |  sqrt      - square root
+:w        - exit Abacus          |  log       - lg10
+                                 |  ln        - ln
+variables                        |  min       - minimum of x, y
+-------------------------------  |  max       - maximum of x, y
+Pi        - 3.141592654          |  abs       - |x|
+e         - 2.718281828          |  negate    - -x
+                                 |
+operators                        |
+-------------------------------  |
++         - Addition             |
+-         - Subtraction          |
+*         - Multiplication       |
+/         - Division             |
+mod       - Modulus              |
+div       - Integer division     |
+()        - Parentheses          |
