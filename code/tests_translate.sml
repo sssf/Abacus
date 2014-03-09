@@ -43,9 +43,9 @@ fun test () =
        POST: true iff test n executes correctly
    *)
   fun test 0 = translate([]) = []
-    | test 1 = translate([Open,Open,Open,Open,Variable("x"),Closed,Closed,Closed,Closed]) = [Variable("x")]
+    | test 1 = translate([Open,Open,Open,Open,Variable("x"),Close,Close,Close,Close]) = [Variable("x")]
     | test 2 = translate([Number("1"),Operator("+"),Number("1")]) = [Number("1"),Number("1"),Operator("+")]
-    | test 3 = translate([Negate,Function("cos"),Function("sin"),Open,Variable("x"),Operator("*"),Number("1"),Closed])
+    | test 3 = translate([Negate,Function("cos"),Function("sin"),Open,Variable("x"),Operator("*"),Number("1"),Close])
                             =  [Variable "x", Number "1", Operator "*", Function "sin", Function "cos", Function "negate"]
     | test _ = raise Domain
       val numberOfTests = 4

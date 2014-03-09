@@ -46,7 +46,7 @@ fun test () =
     | test 1 = tokenize("-1-7") = [Negate ,Number("1"), Operator("-"), Number("7")]
     | test 2 = tokenize("sin x") = [Function("sin"), Variable("x")]
     | test 3 = tokenize("(sin (x-15))^2") = [Open, Function("sin"),Open,Variable("x"),Operator("-"),
-                                              Number("15"),Closed,Closed,Operator("^"),Number("2")]
+                                              Number("15"),Close,Close,Operator("^"),Number("2")]
     | test _ = raise Domain
       val numberOfTests = 4
     in
