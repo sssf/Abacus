@@ -15,7 +15,7 @@ val functionList = [("sin",   9, (fn stack => push(pop(stack),Math.sin(top(stack
                     ("min",   9, (fn stack => push(pop(stack),Real.min(top(pop(stack)),top(stack))))),
                     ("max",   9, (fn stack => push(pop(stack),Real.max(top(pop(stack)),top(stack))))),
                     ("abs",   9, (fn stack => push(pop(stack),Real.abs(top(stack))))),
-                    ("negate",8, (fn stack => push(pop(stack),~1.0*(top(stack)))))];
+                    ("negate",9, (fn stack => push(pop(stack),~1.0*(top(stack)))))];
 
 
 (* isFunction(str)
