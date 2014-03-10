@@ -42,7 +42,7 @@ local
      POST: unit
      SIDE-EFFECTS: prints content of data/credits.txt to stdOut
   *)
-  fun credits() = printFile("data/credits.txt");
+  fun credits() = (logo(); printFile("data/credits.txt"));
 
 
   (* exception Quit
@@ -69,7 +69,6 @@ local
                   "exit"    => raise Quit                 |
                   "quit"    => raise Quit                 |
                   ":q"      => raise Quit                 |
-                  "env"     => raise Quit                 |
                   ":Q"      => raise Quit                 | _ => exp
     end;
 

@@ -51,8 +51,9 @@ val operatorList = [("+",4,   operatorFunction (fn (x,y) => x +  y)),
                     ("-",4,   operatorFunction (fn (x,y) => y - x)),
                     ("/",5,   operatorFunction (fn (x,y) => y / x)),
                     ("*",5,   operatorFunction (fn (x,y) => x * y)),
-                    ("mod",5, operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
-                    ("%",5,   operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))),
+                    ("div",5, operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(y) div Real.trunc(x)))),
+                    ("mod",5, operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(y) mod Real.trunc(x)))),
+                    ("%",5,   operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(y) mod Real.trunc(x)))),
                     ("^",6,   operatorFunction (fn (y,x) => Math.pow(x,y) ))(*, 
                     ("!",6,   operatorFunction (fn (x,y) => Real.fromInt(Real.trunc(x) mod Real.trunc(y)))))*)];
 
