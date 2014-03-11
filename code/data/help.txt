@@ -1,22 +1,22 @@
 
-For more detailed information 
+For more detailed information
 see the documentation.
 
 commands                         |  function
 -------------------------------  |  -------------------------------
 help      - open help            |  sin       - sine
 credits   - show credits         |  arcsin    - arcsine
-logo      - show Abacus logo     |  cos       - cosine 
-                                 |  arcos     - arcosine                                    
-quit      - exit Abacus          |  tan       - tangens 
-exit      - exit Abacus          |  arctan    - arctangens 
+logo      - show Abacus logo     |  cos       - cosine
+                                 |  arcos     - arcosine
+quit      - exit Abacus          |  tan       - tangens
+exit      - exit Abacus          |  arctan    - arctangens
 :q        - exit Abacus          |  sqrt      - square root
 :w        - exit Abacus          |  log       - lg10
                                  |  ln        - ln
-variables                        |  min       - minimum of x, y
--------------------------------  |  max       - maximum of x, y
-Pi        - 3.141592654          |  abs       - |x|
-e         - 2.718281828          |  negate    - -x
+variables                        |  abs       - |x|
+-------------------------------  |  negate    - -x
+Pi        - 3.141592654          |
+e         - 2.718281828          |
                                  |
 operators                        |
 -------------------------------  |
