@@ -56,16 +56,16 @@ fun test () =
     | test 3 = floatEqual(top(getFunction(Function("sqrt")) testStack),   2.645751311)
     | test 4 = floatEqual(top(getFunction(Function("log")) testStack),    0.84509804)
     | test 5 = floatEqual(top(getFunction(Function("ln")) testStack),     1.945910149)
-    | test 6 = floatEqual(top(getFunction(Function("min")) testStack),    5.0)
-    | test 7 = floatEqual(top(getFunction(Function("max")) testStack),    7.0)
-    | test 8 = floatEqual(top(getFunction(Function("abs")) testStack),    7.0)
-    | test 9 = floatEqual(top(getFunction(Function("negate")) testStack), ~7.0)
-    | test 10 = isFunction("sin")
-    | test 11 = not (isFunction("t-dAwg"))
-    | test 12 = isSymbolicOperator(#"+")
-    | test 13 = not (isSymbolicOperator(#"="))
+(*    | test 6 = floatEqual(top(getFunction(Function("min")) testStack),    5.0)
+    | test 7 = floatEqual(top(getFunction(Function("max")) testStack),    7.0)*)
+    | test 6 = floatEqual(top(getFunction(Function("abs")) testStack),    7.0)
+    | test 7 = floatEqual(top(getFunction(Function("negate")) testStack), ~7.0)
+    | test 8 = isFunction("sin")
+    | test 9 = not (isFunction("t-dAwg"))
+    | test 10 = isSymbolicOperator(#"+")
+    | test 11 = not (isSymbolicOperator(#"="))
     | test _ = raise Domain
-      val numberOfTests = 14
+      val numberOfTests = 12
     in
       List.app result (List.tabulate(numberOfTests, fn n => (n, test)))
     end;
