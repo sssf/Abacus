@@ -12,7 +12,8 @@ datatype enviroment = Enviroment of (string * real) list
   VALUE: List of default variables and their values
 *)
 val defaultEnviroment = Enviroment([("Pi", Math.pi),
-                                    ("e",  Math.e)])
+                                    ("e",  Math.e),
+                                    ("t_dAwg", 42.69)])
 
 (*
   getValue (enviroment, var)
