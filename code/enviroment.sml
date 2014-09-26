@@ -10,8 +10,9 @@ datatype enviroment = Enviroment of (string * real) list
 (*
   TYPE: (string * real)
   VALUE: List of default variables and their values
+  Hej!
 *)
-val defaultEnviroment = Enviroment([("Pi", Math.pi),
+val defaultEnviroment = Enviroment([("Pi", Math.pi),i
                                     ("e",  Math.e),
                                     ("t_dAwg", 42.69)])
 
